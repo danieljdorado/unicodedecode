@@ -34,8 +34,9 @@ def examen_unicode(text):
             'code_point': 'U+' + str(hex(ord(char))),
             }
             char_list.append(char_dict)
+
         elif ord(char) == 0xd:
-            # If character is a Carriage Return
+            # If character is a Carriage Return.
             print('Carrage return')
             char_dict = {
             'char': char,
