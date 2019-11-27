@@ -14,8 +14,8 @@ def search(request):
             text = examen_unicode(text)
             return render(request, 'search_results.html', {'form': form, 'text': text, 'version': ud.unidata_version})
 
-    form = UnicodeTextForm(request.POST)
-    return render(request, 'form.html', {'form': form})
+    form = UnicodeTextForm()
+    return render(request, 'base.html', {'form': form})
 
 
 def search_results(request, text):

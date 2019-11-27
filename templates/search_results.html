@@ -1,12 +1,6 @@
-{% extends 'header.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-<body>
-    <form action="{% url 'search' %}" method="post">
-        {% csrf_token %}
-        {{ form }}<br>
-        <button type="Submit">Search</button>
-    </form>
  
     <table>
         <th>Character</th>
@@ -31,5 +25,5 @@
         {% endfor %}
     </table>
     <p>Unicode Version: {{version}}.</p>
-</html>
+
 {% endblock %}
