@@ -4,7 +4,6 @@ from .forms import UnicodeTextForm
 import unicodedata as ud
 
 
-
 def search(request):
 
     if request.method == 'POST':
@@ -16,12 +15,6 @@ def search(request):
 
     form = UnicodeTextForm()
     return render(request, 'base.html', {'form': form})
-
-
-def search_results(request, text):
-    pass
-
-
 
 
 def examen_unicode(text):
@@ -56,7 +49,7 @@ def examen_unicode(text):
             }
             char_list.append(char_dict)
         else:
-            # Default 
+            # Default.
 
             try:
                 char_dict = {
@@ -84,7 +77,3 @@ def examen_unicode(text):
                 char_list.append(char_dict)
 
     return char_list
-    
-
-
-
