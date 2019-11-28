@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import UnicodeTextForm
 import unicodedata as ud
-
+from .mappings import bidi,category
 
 def search(request):
 
@@ -26,7 +26,7 @@ def examen_unicode(text):
             char_dict = {
             'char': char,
             'name': 'LINE FEED',
-            'category': '',
+            'category': category[ud.category(char)],
             'decimal': '',
             'digit': '',
             'bidi': '',
@@ -37,11 +37,25 @@ def examen_unicode(text):
 
         elif ord(char) == 0xd:
             # If character is a Carriage Return.
-            print('Carrage return')
             char_dict = {
             'char': char,
             'name': 'CARRIAGE RETURN',
-            'category': '',
+            'category': category[ud.category(char)],
+            'decimal': '',
+            'digit': '',
+            'bidi': '',
+            'ord': ord(char),
+            'code_point': 'U+' + str(hex(ord(char))),
+            }
+            char_list.append(char_dict)
+        elif ord(char) == 0x20:
+            # If character is SPACE.
+            
+            print('Carrage return')
+            char_dict = {
+            'char': char,
+            'name': 'SPACE',
+            'category': category[ud.category(char)],
             'decimal': '',
             'digit': '',
             'bidi': '',
@@ -56,10 +70,10 @@ def examen_unicode(text):
                 char_dict = {
                 'char': char,
                 'name': ud.name(char),
-                'category': ud.category(char),
+                'category': category[ud.category(char)],
                 'decimal': ud.decimal(char, ''),
                 'digit': ud.digit(char, ''),
-                'bidi': ud.bidirectional(char),
+                'bidi': bidi[ud.bidirectional(char)],
                 'ord': ord(char),
                 'code_point': 'U+' + str(hex(ord(char))),
                 }
