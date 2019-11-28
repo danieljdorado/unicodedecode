@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
- 
     <table>
         <th>Character</th>
         <th>Name</th>
         <th>Category</th>
-        <th>Decimal</th>
         <th>Digit</th>
         <th>Bi-Directional</th>
         <th>Integer</th>
@@ -16,7 +14,6 @@
                 <td>{{x.char}}</td>
                 <td>{{x.name}}</td>
                 <td>{{x.category}}</td>
-                <td>{{x.decimal}}</td>
                 <td>{{x.digit}}</td>
                 <td>{{x.bidi}}</td>
                 <td>{{x.ord}}</td>
@@ -24,16 +21,10 @@
         </tr>
         {% endfor %}
     </table>
-        <p>
-            Normalized forms: &emsp;
-            {% for key, item in normalization_form.items %}
-                {{ key }} : {{ item }} &emsp;
-            {% endfor %}
-        </p>
-
+    <p>
+        NORMALIZATION: &emsp;
+        {% for key, item in normalization_form.items %}
+            {{ key }} : {{ item }} &emsp;
+        {% endfor %}
     </p>
-    
-
-    <p>Unicode Version: {{version}}.</p>
-
 {% endblock %}

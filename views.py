@@ -31,7 +31,6 @@ def examen_unicode(text):
             'char': char,
             'name': 'LINE FEED',
             'category': category[ud.category(char)],
-            'decimal': '',
             'digit': '',
             'bidi': '',
             'ord': ord(char),
@@ -45,7 +44,6 @@ def examen_unicode(text):
             'char': char,
             'name': 'CARRIAGE RETURN',
             'category': category[ud.category(char)],
-            'decimal': '',
             'digit': '',
             'bidi': '',
             'ord': ord(char),
@@ -54,13 +52,10 @@ def examen_unicode(text):
             char_list.append(char_dict)
         elif ord(char) == 0x20:
             # If character is SPACE.
-            
-            print('Carrage return')
             char_dict = {
             'char': char,
             'name': 'SPACE',
             'category': category[ud.category(char)],
-            'decimal': '',
             'digit': '',
             'bidi': '',
             'ord': ord(char),
@@ -75,7 +70,6 @@ def examen_unicode(text):
                 'char': char,
                 'name': ud.name(char),
                 'category': category[ud.category(char)],
-                'decimal': ud.decimal(char, ''),
                 'digit': ud.digit(char, ''),
                 'bidi': bidi[ud.bidirectional(char)],
                 'ord': ord(char),
@@ -87,7 +81,6 @@ def examen_unicode(text):
                 'char': char,
                 'name': 'UNKNOWN',
                 'category': '',
-                'decimal': '',
                 'digit': '',
                 'bidi': '',
                 'ord': ord(char),
