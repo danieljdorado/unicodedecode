@@ -10,8 +10,12 @@ def search(request):
         form = UnicodeTextForm(request.POST)
         if form.is_valid():
             text = form.cleaned_data['text']
+            normalization_form = get_normalization_form(text)
             text = examen_unicode(text)
-            return render(request, 'search_results.html', {'form': form, 'text': text, 'version': ud.unidata_version})
+            return render(request, 'search_results.html', {'form': form,
+                                                            'text': text,
+                                                            'version': ud.unidata_version,
+                                                            'normalization_form': normalization_form,})
 
     form = UnicodeTextForm()
     return render(request, 'base.html', {'form': form})
@@ -92,3 +96,18 @@ def examen_unicode(text):
                 char_list.append(char_dict)
 
     return char_list
+
+def get_normalization_form(string):
+    'Return Dictionary of Normalization Forms'
+
+    normalization_form = {
+        'NFC': False,
+        'NFKC': False,
+        'NFD': False,
+        'NFKD': False,
+    }
+
+    for form in normalization_form:
+        if ud.is_normalized(form, string) == True:
+            normalization_form[form] = True
+    return normalization_form

@@ -24,6 +24,16 @@
         </tr>
         {% endfor %}
     </table>
+        <p>
+            Normalized forms: &emsp;
+            {% for key, item in normalization_form.items %}
+                {{ key }} : {{ item }} &emsp;
+            {% endfor %}
+        </p>
+
+    </p>
+    
+
     <p>Unicode Version: {{version}}.</p>
 
 {% endblock %}
