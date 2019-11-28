@@ -37,7 +37,9 @@
         <form action="{% url 'search' %}" method="post">
           {% csrf_token %}
           {{ form }}
-          <button id="download-button" class="btn-large waves-effect waves-light orange">Search</button>
+          <p>
+              <button id="download-button" class="btn-large waves-effect waves-light orange">Search</button>
+          </p>
       </form>
       <div class="row center">
         {% block content %} {% endblock %}
