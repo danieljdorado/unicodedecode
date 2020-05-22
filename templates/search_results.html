@@ -22,9 +22,15 @@
         {% endfor %}
     </table>
     <p>
-        Normalization: &emsp;
+        <b>Normalization Form:</b> &emsp;
         {% for key, item in normalization_form.items %}
-            {{ key }} : {{ item }} &emsp;
+            <span style="color: black;">{{key}}:&nbsp;</span>
+            {% if item == True %}
+                <span style="color: green;">{{ item }} &emsp;</span>
+                    {% else  %}
+                    <span style="color: red;">{{ item }} &emsp;</span>
+                    {% endif %}
+
         {% endfor %}
     </p>
 {% endblock %}
