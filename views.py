@@ -5,7 +5,7 @@ import unicodedata as ud
 from .mappings import bidi,category
 
 def search(request):
-
+    """View for home page and search."""
     if request.method == 'POST':
         form = UnicodeTextForm(request.POST)
         if form.is_valid():
@@ -16,17 +16,16 @@ def search(request):
                                                             'text': text,
                                                             'version': ud.unidata_version,
                                                             'normalization_form': normalization_form,})
-
     form = UnicodeTextForm()
     return render(request, 'base.html', {'form': form})
 
 
 def examen_unicode(text):
+    """Returns a list of dictionaries for each unicode character."""
     char_list = []
     for char in text:
         if ord(char) == 0xa:
             # If character is a LINE FEED.
-
             char_dict = {
             'char': char,
             'name': 'LINE FEED',
@@ -64,7 +63,6 @@ def examen_unicode(text):
             char_list.append(char_dict)
         else:
             # Default.
-
             try:
                 char_dict = {
                 'char': char,
@@ -91,7 +89,7 @@ def examen_unicode(text):
     return char_list
 
 def get_normalization_form(string):
-    'Return Dictionary of Normalization Forms'
+    """Return Dictionary of Normalization Forms"""
 
     normalization_form = {
         'NFC': False,
@@ -104,3 +102,7 @@ def get_normalization_form(string):
         if ud.is_normalized(form, string) == True:
             normalization_form[form] = True
     return normalization_form
+
+def tofu(request):
+    'View for tofu page.'
+    return render(request, 'tofu.html')
