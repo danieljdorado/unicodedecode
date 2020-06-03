@@ -105,4 +105,5 @@ def get_normalization_form(string):
 
 def tofu(request):
     'View for tofu page.'
-    return render(request, 'tofu.html')
+    return render(request, 'tofu.html', {'title' : 'Tofu',
+                                         'tagline' : 'Not just for eating'})
