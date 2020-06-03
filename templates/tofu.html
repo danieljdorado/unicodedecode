@@ -1,148 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  {% load static %}
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Unicode Search - Tofu</title>
+{% extends 'info_base.html' %}
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-</head>
-<body>
-  <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#">About</a></li>
-      </ul>
+{% block content %}
 
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">About</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    </div>
-  </nav>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-      <br><br>
-      <h1 class="header center orange-text">Tofu</h1>
-      <div class="row center">
-        <h5 class="header col s12 light">Not just for eating</h5>
+<p>Are you seeing <i>tofu</i>, that is, "□" instead of 𐓇 or ൠ? Perhaps you just see "□ or □".
+  They're different, we promise! Regardless of how your characters are being rendered,
+  <a href='/'>Unicode Search</a> helps you to uncover the
+  underlying codepoints. Seeing tofu isn't making your life
+  easier so consider checking out <a href='https://www.google.com/get/noto/'>Google's Noto Fonts</a>,
+  a comprehensive open source font collection before
+  <a href='https://killedbygoogle.com/'>Google kills it.</a>
+</p>
+<div>
+  <div class="card horizontal">
+
+    <div class="card-stacked">
+      <div class="card-content">
+        <table>
+          <tbody><tr><th>Character</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Digit</th>
+          <th>Bi-Directional</th>
+          <th>Integer</th>
+          <th>Code Point</th>
+
+              </tr><tr>
+                  <td>𐓇</td>
+                  <td>OSAGE CAPITAL LETTER SHA</td>
+                  <td>UPPERCASE LETTER</td>
+                  <td></td>
+                  <td>LEFT-TO-RIGHT</td>
+                  <td>66759</td>
+                  <td>U+0x104c7</td>
+          </tr>
+
+              <tr>
+                  <td>ൠ</td>
+                  <td>MALAYALAM LETTER VOCALIC RR</td>
+                  <td>OTHER LETTER</td>
+                  <td></td>
+                  <td>LEFT-TO-RIGHT</td>
+                  <td>3424</td>
+                  <td>U+0xd60</td>
+          </tr>
+
+      </tbody></table>
+      <p>
+          <b>Normalization Form:</b>  
+              <span style="color: black;">NFC:&nbsp;</span>
+                  <span style="color: green;">True  </span>
+              <span style="color: black;">NFKC:&nbsp;</span>
+                  <span style="color: green;">True  </span>
+              <span style="color: black;">NFD:&nbsp;</span>
+                  <span style="color: green;">True  </span>
+              <span style="color: black;">NFKD:&nbsp;</span>
+                  <span style="color: green;">True  </span>
+      </p>
       </div>
-      <div class="row center">
-        {% block content %} {% endblock %}
-
-        <p>Are you seeing <i>tofu</i>, that is, "□" instead of 𐓇 or ൠ? Perhaps you just see "□ or □".
-          They're different, we promise! Regardless of how your characters are being rendered,
-          <a href='/'>Unicode Search</a> helps you to uncover the
-          underlying codepoints. Seeing tofu isn't making your life
-          easier so consider checking out <a href='https://www.google.com/get/noto/'>Google's Noto Fonts</a>,
-          a comprehensive open source font collection before
-          <a href='https://killedbygoogle.com/'>Google kills it.</a>
-
-       </p>
-        <div>
-          <div class="card horizontal">
-
-            <div class="card-stacked">
-              <div class="card-content">
-                <table>
-                  <tbody><tr><th>Character</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Digit</th>
-                  <th>Bi-Directional</th>
-                  <th>Integer</th>
-                  <th>Code Point</th>
-                  
-                      </tr><tr>
-                          <td>𐓇</td>
-                          <td>OSAGE CAPITAL LETTER SHA</td>
-                          <td>UPPERCASE LETTER</td>
-                          <td></td>
-                          <td>LEFT-TO-RIGHT</td>
-                          <td>66759</td>
-                          <td>U+0x104c7</td>
-                  </tr>
-                  
-                      <tr>
-                          <td>ൠ</td>
-                          <td>MALAYALAM LETTER VOCALIC RR</td>
-                          <td>OTHER LETTER</td>
-                          <td></td>
-                          <td>LEFT-TO-RIGHT</td>
-                          <td>3424</td>
-                          <td>U+0xd60</td>
-                  </tr>
-                  
-              </tbody></table>
-              <p>
-                  <b>Normalization Form:</b>  
-                      <span style="color: black;">NFC:&nbsp;</span>
-                          <span style="color: green;">True  </span>
-                      <span style="color: black;">NFKC:&nbsp;</span>
-                          <span style="color: green;">True  </span>
-                      <span style="color: black;">NFD:&nbsp;</span>
-                          <span style="color: green;">True  </span>
-                      <span style="color: black;">NFKD:&nbsp;</span>
-                          <span style="color: green;">True  </span>
-              </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br><br>
     </div>
   </div>
+</div>
 
-  <footer class="page-footer orange">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">About Unicode Search</h5>
-          <p class="grey-text text-lighten-4">Unicode Search is a tool designed to help you explore your text data quickly and easily.</p>
-
-
-        </div>
-
-
-          <div class="col l3 s12">
-            <h5 class="white-text">Links</h5>
-            <ul>
-              <li><a class="white-text" href="/">Search</a></li>
-              <li><a class="white-text" href="/tofu">Tofu</a></li>
-              <!--
-              <li><a class="white-text" href="#!">Link 3</a></li>
-              <li><a class="white-text" href="#!">Link 4</a></li>
-              -->
-            </ul>
-          </div>
-
-
-          <div class="col l3 s12">
-            <h5 class="white-text">Legal</h5>
-            <ul>
-              <li><a class="white-text" href="#!">Terms and Conditions</a></li>
-              <li><a class="white-text" href="#!">Privacy Policy</a></li>
-            </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-      Theme by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
-      </div>
-    </div>
-  </footer>
-
-
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="{% static 'js/materialize.js' %}"></script>
-  <script src="{% static '/js/init.js' %}"></script>
-
-  </body>
-</html>
+{% endblock %}
