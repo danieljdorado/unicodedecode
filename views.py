@@ -17,7 +17,7 @@ def search(request):
                                                             'version': ud.unidata_version,
                                                             'normalization_form': normalization_form,})
     form = UnicodeTextForm()
-    return render(request, 'base.html', {'form': form})
+    return render(request, 'search_base.html', {'form': form})
 
 
 def examen_unicode(text):
