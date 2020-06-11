@@ -1,6 +1,17 @@
-{% extends 'search_base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
+
+    <div class="row center">
+        <form action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <p>
+            <button id="download-button" class="btn-large waves-effect waves-light orange">Search</button>
+        </p>
+        </form>
+    </div>
+
     <table>
         <th>Character</th>
         <th>Name</th>
