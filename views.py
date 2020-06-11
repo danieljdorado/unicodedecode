@@ -107,3 +107,8 @@ def tofu(request):
     'View for tofu page.'
     return render(request, 'tofu.html', {'title' : 'Tofu',
                                          'tagline' : 'Not just for eating'})
+
+def about(request):
+    'View function for about page of site.'
+    return render(request, 'about.html', {'title' : 'About',
+                                          'tagline' : 'Get to know Us'})
