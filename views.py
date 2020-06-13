@@ -1,10 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import UnicodeTextForm
-import unicodedata as ud
-from .mappings import bidi,categoryfrom django.shortcuts import render
-from django.http import HttpResponse
-from .forms import UnicodeTextForm
 from .uni import get_normalization_form, examen_unicode
 
 def search(request):
