@@ -12,12 +12,12 @@ def search(request):
             text = form.cleaned_data['text']
             normalization_form = get_normalization_form(text)
             text = examen_unicode(text)
-            return render(request, 'search_results.html', {'form': form,
+            return render(request, 'search.html', {'form': form,
                                                             'text': text,
                                                             'version': ud.unidata_version,
                                                             'normalization_form': normalization_form,})
     form = UnicodeTextForm()
-    return render(request, 'search_base.html', {'form': form})
+    return render(request, 'search.html', {'form': form})
 
 
 def examen_unicode(text):

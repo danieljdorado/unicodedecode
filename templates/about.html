@@ -1,4 +1,4 @@
-{% extends 'info_base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
@@ -9,50 +9,11 @@
 
 </p>
 <div>
-  <div class="card horizontal">
+  <div>
 
-    <div class="card-stacked">
-      <div class="card-content">
-        <table>
-          <tbody><tr><th>Character</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Digit</th>
-          <th>Bi-Directional</th>
-          <th>Integer</th>
-          <th>Code Point</th>
+    <div>
+      <div>
 
-              </tr><tr>
-                  <td>𐓇</td>
-                  <td>OSAGE CAPITAL LETTER SHA</td>
-                  <td>UPPERCASE LETTER</td>
-                  <td></td>
-                  <td>LEFT-TO-RIGHT</td>
-                  <td>66759</td>
-                  <td>U+0x104c7</td>
-          </tr>
-
-              <tr>
-                  <td>ൠ</td>
-                  <td>MALAYALAM LETTER VOCALIC RR</td>
-                  <td>OTHER LETTER</td>
-                  <td></td>
-                  <td>LEFT-TO-RIGHT</td>
-                  <td>3424</td>
-                  <td>U+0xd60</td>
-          </tr>
-
-      </tbody></table>
-      <p>
-          <b>Normalization Form:</b>  
-              <span style="color: black;">NFC:&nbsp;</span>
-                  <span style="color: green;">True  </span>
-              <span style="color: black;">NFKC:&nbsp;</span>
-                  <span style="color: green;">True  </span>
-              <span style="color: black;">NFD:&nbsp;</span>
-                  <span style="color: green;">True  </span>
-              <span style="color: black;">NFKD:&nbsp;</span>
-                  <span style="color: green;">True  </span>
       </p>
       </div>
     </div>
@@ -60,38 +21,3 @@
 </div>
 
 {% endblock %}
-            <ul>
-              <li><a class="white-text" href="/">Search</a></li>
-              <li><a class="white-text" href="/tofu">Tofu</a></li>
-              <li><a class="white-text" href="#!">Link 3</a></li>
-              <li><a class="white-text" href="#!">Link 4</a></li>
-            </ul>
-          </div>
-        -->
-
-          <div class="col l3 s12">
-            <h5 class="white-text">Legal</h5>
-            <ul>
-              <li><a class="white-text" href="#!">Terms and Conditions</a></li>
-              <li><a class="white-text" href="#!">Privacy Policy</a></li>
-            </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-      Theme by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a> – Unicode Version: {{version}}.
-      </div>
-    </div>
-  </footer>
-
-
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="{% static 'js/materialize.js' %}"></script>
-  <script src="{% static '/js/init.js' %}"></script>
-
-  </body>
-</html>
-
-
