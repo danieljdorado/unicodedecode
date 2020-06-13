@@ -12,31 +12,28 @@
   <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-
   <!-- Navigation Bar -->
   {% block navigation %}
     {% include 'navigation.html' %}
   {% endblock %}
-  <div id="page-container">
-    <div id="content-wrap">
-      <div class="section no-pad-bot" id="index-banner">
-        <div class="container" >
-          <br><br>
-          <h1 class="header center orange-text">{{ title }}</h1>
-          <div class="row center">
-            <h5 class="header col s12 light">{{ tagline }}</h5>
-          </div>
-          <div class="row center">
-            <form action="{% url 'search' %}" method="post">
-            <div class="row center">
-              {% block content %} {% endblock %}
-            </div>
-          </div>
-          <br><br>
 
-          </div>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center orange-text">{{ title }}</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">{{ tagline }}</h5>
       </div>
+      <div class="row center">
+        <form action="{% url 'search' %}" method="post">
+        <div class="row center">
+          {% block content %} {% endblock %}
+        </div>
+      </div>
+      <br><br>
 
+    </div>
+  </div>
 
 
 
@@ -44,8 +41,7 @@
   {% block footer %}
    {% include 'footer.html' %}
   {% endblock %}
-   </div>
- </div>
+
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="{% static 'js/materialize.js' %}"></script>
