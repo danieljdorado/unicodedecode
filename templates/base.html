@@ -16,7 +16,7 @@
   {% block navigation %}
     {% include 'navigation.html' %}
   {% endblock %}
-  <!-- TODO: Make title and tag string passed in-->
+
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
       <br><br>
@@ -25,13 +25,10 @@
         <h5 class="header col s12 light">{{ tagline }}</h5>
       </div>
       <div class="row center">
-      </div>
-      <div class="row center">
         <form action="{% url 'search' %}" method="post">
-
-      <div class="row center">
-        {% block content %} {% endblock %}
-      </div>
+        <div class="row center">
+          {% block content %} {% endblock %}
+        </div>
       </div>
       <br><br>
 
