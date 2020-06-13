@@ -1,4 +1,4 @@
-"""Extensions of unicode data."""
+"""Extensions of unicodedata."""
 
 import unicodedata as ud
 from .mappings import bidi, category
@@ -19,7 +19,7 @@ def examen_unicode(text):
                 'bidi' : '',
                 'ord' : ord(char),
                 'code_point' : get_codepoint(char),
-                }
+            }
             char_list.append(char_dict)
 
         elif ord(char) == 0xd:
@@ -32,7 +32,7 @@ def examen_unicode(text):
                 'bidi' : '',
                 'ord' : ord(char),
                 'code_point' : get_codepoint(char),
-                }
+            }
             char_list.append(char_dict)
         elif ord(char) == 0x20:
             # If character is SPACE.
@@ -44,7 +44,7 @@ def examen_unicode(text):
                 'bidi' : '',
                 'ord' : ord(char),
                 'code_point' : get_codepoint(char),
-                }
+            }
             char_list.append(char_dict)
         else:
             # Default.
@@ -57,7 +57,7 @@ def examen_unicode(text):
                     'bidi' : bidi[ud.bidirectional(char)],
                     'ord' : ord(char),
                     'code_point' : get_codepoint(char),
-                    }
+                }
                 char_list.append(char_dict)
             except:
                 char_dict = {
@@ -68,7 +68,7 @@ def examen_unicode(text):
                     'bidi' : '',
                     'ord' : ord(char),
                     'code_point': get_codepoint(char),
-                    }
+                }
                 char_list.append(char_dict)
 
     return char_list

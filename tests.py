@@ -1,7 +1,8 @@
+"""Backend Tests."""
+
+import unicodedata as ud
 from django.test import TestCase
 from .uni import get_codepoint
-import unicodedata as ud
-
 
 
 class UnicodeVersionTestCase(TestCase):
@@ -12,6 +13,7 @@ class UnicodeVersionTestCase(TestCase):
         self.unicode_version = "12.1.0"
 
     def test_unicode_version(self):
+        """Tests current unicode version to make sure footer gets updated."""
         self.assertEqual(ud.unidata_version, self.unicode_version)
 
 
@@ -37,6 +39,8 @@ class TestUni(TestCase):
             ' ' : 'U+0020' # SPACE.
         }
 
+
     def test_get_codepoint(self):
+        """Test get_codepoint output."""
         for char, codepoint in self.codepoints.items():
             self.assertEqual(get_codepoint(char), codepoint)
