@@ -2,7 +2,7 @@
 
 import unicodedata as ud
 from django.test import TestCase
-from .uni import get_codepoint
+from .uni import get_codepoint, get_normalization_form
 
 
 class UnicodeVersionTestCase(TestCase):
@@ -44,3 +44,30 @@ class TestUni(TestCase):
         """Test get_codepoint output."""
         for char, codepoint in self.codepoints.items():
             self.assertEqual(get_codepoint(char), codepoint)
+
+
+class TestNormalization(TestCase):
+    """Normalization"""
+    def setUp(self):
+        """Test examples."""
+        self.forms = {
+            # U+0061 LATIN SMALL LETTER A.
+            'a': {'NFC': True, 'NFKC' : True, 'NFD' : True, 'NFKD' : True},
+            # U+00E9 LATIN SMALL LETTER E WITH ACUTE.
+            'é' : {'NFC': True, 'NFKC' : True, 'NFD' : False, 'NFKD' : False},
+            # U+0065 LATIN SMALL LETTER E.
+            # U+0301 COMBINING ACUTE ACCENT.
+            'é': {'NFC': False, 'NFKC' : False, 'NFD' : True, 'NFKD' : True},
+            # U+FB01 LATIN SMALL LIGATURE FI.
+            'ﬁ': {'NFC': True, 'NFKC' : False, 'NFD' : True, 'NFKD' : False},
+            # U+1E9B LATIN SMALL LETTER LONG S WITH DOT ABOVE.
+            # U+0323 COMBINING DOT BELOW.
+            'ẛ̣': {'NFC': True, 'NFKC' : False, 'NFD' : False, 'NFKD' : False},
+            # U+0323 
+        }
+
+    def test_normalization_check(self):
+        """Normalization"""
+        for text, form in self.forms.items():
+            text = get_normalization_form(text)
+            self.assertEqual(text, form)
