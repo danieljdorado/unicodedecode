@@ -77,16 +77,14 @@ def examen_unicode(text):
 def get_normalization_form(string):
     """Return Dictionary of Normalization Forms."""
 
-    normalization_form = {
-        'NFC' : False,
-        'NFKC' : False,
-        'NFD' : False,
-        'NFKD' : False,
-    }
+    forms = ['NFC', 'NFKC', 'NFD', 'NFKD']
+    normalization_form = dict()
 
-    for form in normalization_form:
+    for form in forms:
         if ud.is_normalized(form, string):
             normalization_form[form] = True
+        else:
+            normalization_form[form] = False
     return normalization_form
 
 
