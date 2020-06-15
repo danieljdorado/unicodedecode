@@ -2,7 +2,7 @@
 
 import unicodedata as ud
 from django.test import TestCase
-from .uni import get_codepoint
+from . import unicode_util as u
 
 
 class UnicodeVersionTestCase(TestCase):
@@ -17,10 +17,10 @@ class UnicodeVersionTestCase(TestCase):
         self.assertEqual(ud.unidata_version, self.unicode_version)
 
 
-class TestUni(TestCase):
-    """Verify codepoint output"""
+class TestCodePoints(TestCase):
+    """Verify codepoint output."""
     def setUp(self):
-        self.codepoints = {
+        self.code_points = {
             'h' : 'U+0068', # LATIN SMALL LETTER H.
             '+' : 'U+002B', # PLUS SIGN.
             'È' : 'U+00C8', # LATIN CAPITAL LETTER E WITH GRAVE.
@@ -36,11 +36,108 @@ class TestUni(TestCase):
             '၅' : 'U+1045', # MYANMAR DIGIT FIVE.
             'ש' : 'U+05E9', # HEBREW LETTER SHIN.
             'ۻ' : 'U+06FB', # ARABIC LETTER DAD WITH DOT BELOW.
-            ' ' : 'U+0020' # SPACE.
+            ' ' : 'U+0020', # SPACE.
+            '😀' : 'U+1F600' # GRINNING FACE.
         }
 
 
-    def test_get_codepoint(self):
+    def test_get_code_point(self):
         """Test get_codepoint output."""
-        for char, codepoint in self.codepoints.items():
-            self.assertEqual(get_codepoint(char), codepoint)
+        for char, code_point in self.code_points.items():
+            self.assertEqual(u.get_code_point(char), code_point)
+
+
+class TestNormalization(TestCase):
+    """Normalization."""
+    def setUp(self):
+        """Test examples."""
+        self.forms = {
+            # U+0061 LATIN SMALL LETTER A.
+            'a': {'NFC': True, 'NFKC' : True, 'NFD' : True, 'NFKD' : True},
+            # U+00E9 LATIN SMALL LETTER E WITH ACUTE.
+            'é' : {'NFC': True, 'NFKC' : True, 'NFD' : False, 'NFKD' : False},
+            # U+0065 LATIN SMALL LETTER E.
+            # U+0301 COMBINING ACUTE ACCENT.
+            'é': {'NFC': False, 'NFKC' : False, 'NFD' : True, 'NFKD' : True},
+            # U+FB01 LATIN SMALL LIGATURE FI.
+            'ﬁ': {'NFC': True, 'NFKC' : False, 'NFD' : True, 'NFKD' : False},
+            # U+1E9B LATIN SMALL LETTER LONG S WITH DOT ABOVE.
+            # U+0323 COMBINING DOT BELOW.
+            'ẛ̣': {'NFC': True, 'NFKC' : False, 'NFD' : False, 'NFKD' : False},
+        }
+
+    def test_normalization_check(self):
+        """Normalization."""
+        for text, form in self.forms.items():
+            text = u.get_normalization_form(text)
+            self.assertEqual(text, form)
+
+
+class TestUnicodeName(TestCase):
+    """Test Unicode Names."""
+    def setUp(self):
+        """Test examples."""
+
+        self.names = {
+            ' ' : 'SPACE',
+            '😀' : 'GRINNING FACE',
+            'ꖣ' : 'VAI SYLLABLE VU',
+            '"' : 'QUOTATION MARK',
+            '	' : 'UNKNOWN',
+        }
+
+
+    def test_name(self):
+        """Get character name test."""
+        for char, name in self.names.items():
+            self.assertEqual(u.get_name(char), name)
+
+
+class TestUnicodeDigits(TestCase):
+    """Test Unicode Digits."""
+    def setUp(self):
+        """Test examples."""
+
+        self.digits = {
+            '1' : 1, # U+0031 DIGIT ONE.
+            '⑩': '', # U+246B CIRCLED NUMBER TWELVE.
+            '۵': 5, # U+06F5 EXTENDED ARABIC-INDIC DIGIT FIVE.
+            '६': 6, # U+096C DEVANAGARI DIGIT SIX.
+            '੧': 1, # U+0A67 GURMUKHI DIGIT ONE.
+            '🔟' : '', # U+1F51F KEYCAP TEN.
+            '૫' : 5, # U+0AEB GUJARATI DIGIT FIVE.
+            'Ⅶ' : '', # U+2166 ROMAN NUMERAL SEVEN.
+            '¹' : 1, # U+00B9 SUPERSCRIPT ONE.
+            'H' : '', # U+0048 LATIN CAPITAL LETTER H.
+        }
+
+
+    def test_digit(self):
+        """Get digit test."""
+        for char, digit in self.digits.items():
+            self.assertEqual(u.get_digit(char), digit)
+
+
+# class TestUnicodeCategory(TestCase):
+#     def setUp(self):
+#         """Test examples."""
+
+#         self.categories = {}
+
+
+#     def test_category(self):
+#         """Get category test."""
+#         for char, category in self.categories.items():
+#             self.assertEqual(u.get_category(char), category)
+
+# class TestUnicodeDirection(TestCase):
+#     def setUp(self):
+#         """Test examples."""
+
+#         self.directions = {}
+
+
+#     def test_direction(self):
+#         """Get direction test."""
+#         for char, direction in self.directions.items():
+#             self.assertEqual(u.get_direction(char), direction)
