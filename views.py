@@ -27,6 +27,10 @@ def tofu(request):
     return render(request, 'tofu.html', {'title' : 'Tofu',
                                          'tagline' : 'Not Just For Eating'})
 
+def about(request):
+    """About Page."""
+    return render(request, 'about.html', {'title' : 'About',
+                                         'tagline' : 'Get to know Us'})
 
 def character(request):
     """Character page."""
