@@ -80,3 +80,10 @@ def get_direction(char):
         return bidi[ud.bidirectional(char)]
     except: # pylint: disable=bare-except
         return ''
+
+def get_character_description(char):
+    """Return dictionary of character attributes"""
+    return {
+        'char' : char,
+        'name' : get_name(char)
+    }

@@ -26,3 +26,10 @@ def tofu(request):
     """Tofu page."""
     return render(request, 'tofu.html', {'title' : 'Tofu',
                                          'tagline' : 'Not Just For Eating'})
+
+
+def character(request):
+    """Character page."""
+    char = 'a'
+    char_desc = u.get_character_description(char)
+    return render(request, 'character.html', char_desc)
