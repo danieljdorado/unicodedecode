@@ -4,6 +4,7 @@ from django.shortcuts import render
 from .forms import UnicodeTextForm
 from . import unicode_util as u
 
+
 def search(request):
     """Home and search."""
     if request.method == 'POST':
