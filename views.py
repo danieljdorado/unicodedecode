@@ -32,8 +32,9 @@ def about(request):
     return render(request, 'about.html', {'title' : 'About',
                                          'tagline' : 'Get to know Us'})
 
-def character(request):
+def character(request, slug):
     """Character page."""
-    char = 'a'
-    char_desc = u.get_character_description(char)
+
+    char = chr(int(slug, 16))
+    char_desc = u.get_character_page_description(char)
     return render(request, 'character.html', char_desc)
