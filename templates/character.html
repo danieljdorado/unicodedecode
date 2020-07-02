@@ -2,14 +2,12 @@
 
 {% block content %}
 
-<p>Are you seeing <i>tofu</i>, that is, "□" instead of 𐓇 or ൠ? Perhaps you just see "□ or □".
-  They're different, we promise! Regardless of how your characters are being rendered,
-  <a href='/'>Unicode Search</a> helps you to uncover the
-  underlying codepoints. Seeing tofu isn't making your life
-  easier so consider checking out <a href='https://www.google.com/get/noto/'>Google's Noto Fonts</a>,
-  a comprehensive open source font collection before
-  <a href='https://killedbygoogle.com/'>Google kills it.</a>
-</p>
+
+<div style="font-size: 100px;">
+
+{{ char }}
+ 
+</div>
 
 <div class="card horizontal">
 
@@ -18,45 +16,26 @@
       <table>
         <tbody>
           <tr>
-            <th>Character</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Digit</th>
-            <th>Bi-Directional</th>
-            <th>Integer</th>
-            <th>Code Point</th>
+            <th>Unicode Data</th>
           </tr>
           <tr>
-            <td>𐓇</td>
-            <td>OSAGE CAPITAL LETTER SHA</td>
-            <td>UPPERCASE LETTER</td>
-            <td></td>
-            <td>LEFT-TO-RIGHT</td>
-            <td>66759</td>
-            <td>U+0x104c7</td>
+            <td>Name:</td>
+            <td>{{ name }}</td>
           </tr>
           <tr>
-            <td>ൠ</td>
-            <td>MALAYALAM LETTER VOCALIC RR</td>
-            <td>OTHER LETTER</td>
-            <td></td>
-            <td>LEFT-TO-RIGHT</td>
-            <td>3424</td>
-            <td>U+0xd60</td>
+            <td>Category:</td>
+            <td>{{ category }}</td>
+          </tr>
+          <tr>
+            <td>Digit:</td>
+            <td>{{ digit }}</td>
+          </tr>
+          <tr>
+            <td>Direction:</td>
+            <td>{{ direction }}</td>
           </tr>
         </tbody>
       </table>
-      <p>
-        <b>Normalization Form:</b>  
-          <span style="color: black;">NFC:&nbsp;</span>
-              <span style="color: green;">True  </span>
-          <span style="color: black;">NFKC:&nbsp;</span>
-              <span style="color: green;">True  </span>
-          <span style="color: black;">NFD:&nbsp;</span>
-              <span style="color: green;">True  </span>
-          <span style="color: black;">NFKD:&nbsp;</span>
-              <span style="color: green;">True  </span>
-      </p>
     </div>
   </div>
 </div>

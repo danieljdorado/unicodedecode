@@ -17,6 +17,7 @@ def examen_unicode(text):
             'bidi' : get_direction(char),
             'ord' : ord(char),
             'code_point' : get_code_point(char),
+            'hex' : get_code_point(char, False),
         }
 
         char_list.append(char_dict)
@@ -43,9 +44,11 @@ UNICODE_ALIASES = {
     'U+0020' : 'SPACE',
 }
 
-def get_code_point(char):
+def get_code_point(char, prefix=True):
     """Return character codepoint."""
-    return 'U+{:04X}'.format(ord(char))
+    if prefix:
+        return 'U+{:04X}'.format(ord(char))
+    return '{:04X}'.format(ord(char))
 
 
 def get_name(char):
@@ -80,3 +83,15 @@ def get_direction(char):
         return bidi[ud.bidirectional(char)]
     except: # pylint: disable=bare-except
         return ''
+
+def get_character_page_description(char):
+    """Return dictionary of character attributes"""
+    return {
+        'title' : get_name(char),
+        'tagline' : get_code_point(char),
+        'char' : char,
+        'name' : get_name(char),
+        'category' : get_category(char),
+        'digit': get_digit(char),
+        'direction': get_direction(char),
+    }
