@@ -1,7 +1,7 @@
 """Extensions of unicodedata."""
 
 import unicodedata as ud
-from .mappings import bidi, category
+from Search.mappings import bidi, category
 
 
 def examen_unicode(text):
