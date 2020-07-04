@@ -1,8 +1,9 @@
 """Backend Tests."""
 
-import unicodedata as ud
+
 from django.test import TestCase
-from . import unicode_util as u
+import unicodedata as ud
+import Search.unicode_util as u
 
 
 class UnicodeVersionTestCase(TestCase):

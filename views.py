@@ -1,8 +1,8 @@
 """Views."""
 
 from django.shortcuts import render
-from .forms import UnicodeTextForm
-from . import unicode_util as u
+from Search.forms import UnicodeTextForm
+import Search.unicode_util as u
 
 
 def search(request):
@@ -30,7 +30,7 @@ def tofu(request):
 def about(request):
     """About Page."""
     return render(request, 'about.html', {'title' : 'About',
-                                         'tagline' : 'Get to know Us'})
+                                          'tagline' : 'Get To Know Us'})
 
 def character(request, slug):
     """Character page."""
