@@ -27,6 +27,7 @@ def examen_unicode(text):
     return char_list
 
 
+
 def get_normalization_form(string):
     """Return Dictionary of Normalization Forms."""
 
