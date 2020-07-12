@@ -4,7 +4,7 @@
   {% load static %}
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Unicode Search</title>
+  <title>Unicode Decode</title>
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -20,16 +20,16 @@
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
       <br><br>
-      <h1 class="header center orange-text">Unicode Search</h1>
+      <h1 class="header center orange-text">Unicode Decode</h1>
       <div class="row center">
-        <h5 class="header col s12 light">Examine a Unicode String</h5>
+        <h5 class="header col s12 light">Decode a Unicode String</h5>
       </div>
       <div class="row center">
         <form action="{% url 'search' %}" method="post">
           {% csrf_token %}
           {{ form }}
           <p>
-              <button id="download-button" class="btn-large waves-effect waves-light orange">Search</button>
+              <button id="download-button" class="btn-large waves-effect waves-light orange">Decode</button>
           </p>
       </form>
       <div class="row center">
