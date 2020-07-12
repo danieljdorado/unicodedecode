@@ -21,4 +21,5 @@ urlpatterns = [
     path('', views.search, name='search'),
     path('tofu', views.tofu, name='tofu'),
     path('about', views.about, name='about'),
+    path('terms', terms.html, name='terms'),
 ]

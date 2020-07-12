@@ -30,3 +30,8 @@ def about(request):
     """About Page."""
     return render(request, 'about.html', {'title' : 'About',
                                          'tagline' : 'Get to know Us'})
+
+def Terms(request):
+    """Terms and Conditions Page."""
+    return render(request, 'terms.html', {'title' : 'Terms and Conditions',
+                                         'tagline' : 'User Agreements'})
