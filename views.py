@@ -16,8 +16,8 @@ def search(request):
             return render(request, 'search.html', {'form': form,
                                                    'text': text,
                                                    'normalization_form': normalization_form,
-                                                   'title' : 'Unicode Decode',
-                                                   'tagline' : 'Decode a Unicode String'})
+                                                   'title' : 'Unicode Search',
+                                                   'tagline' : 'Examine a Unicode String'})
     form = UnicodeTextForm()
     return render(request, 'home.html', {'form': form})
 
@@ -26,11 +26,16 @@ def tofu(request):
     """Tofu page."""
     return render(request, 'tofu.html', {'title' : 'Tofu',
                                          'tagline' : 'Not Just For Eating'})
-
 def about(request):
     """About Page."""
     return render(request, 'about.html', {'title' : 'About',
-                                          'tagline': 'Get To Know Us'})
+                                         'tagline' : 'Get To Know Us'})
+
+def Terms(request):
+    """Terms and Conditions Page."""
+    return render(request, 'terms.html', {'title' : 'Terms and Conditions',
+                                         'tagline' : 'User Agreements'})
+
 def terms(request):
         """Terms and Conditions Page."""
         return render(request, 'terms.html', {'title': 'Terms and Conditions',
