@@ -16,8 +16,8 @@ def search(request):
             return render(request, 'search.html', {'form': form,
                                                    'text': text,
                                                    'normalization_form': normalization_form,
-                                                   'title' : 'Unicode Decode',
-                                                   'tagline' : 'Decode a Unicode String'})
+                                                   'title' : 'Unicode Search',
+                                                   'tagline' : 'Examine a Unicode String'})
     form = UnicodeTextForm()
     return render(request, 'home.html', {'form': form})
 
@@ -36,6 +36,7 @@ def terms(request):
         """Terms and Conditions Page."""
         return render(request, 'terms.html', {'title' : 'Terms and Conditions',
                                               'tagline' : 'User Agreements'})
+
 
 def character(request, slug):
     """Character page."""
