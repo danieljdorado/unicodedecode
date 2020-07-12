@@ -44,3 +44,4 @@ def character(request, slug):
     char = chr(int(slug, 16))
     char_desc = u.get_character_page_description(char)
     return render(request, 'character.html', char_desc)
+
