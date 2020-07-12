@@ -15,11 +15,12 @@ Including another URLconf
 """
 
 from django.urls import path
-from Search import views
+from . import views
 
 urlpatterns = [
     path('', views.search, name='search'),
     path('tofu', views.tofu, name='tofu'),
     path('about', views.about, name='about'),
+    path('terms', views.terms, name='terms'),
     path('character/<slug:slug>', views.character, name='character'),
 ]
