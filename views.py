@@ -16,8 +16,8 @@ def search(request):
             return render(request, 'search.html', {'form': form,
                                                    'text': text,
                                                    'normalization_form': normalization_form,
-                                                   'title' : 'Unicode Search',
-                                                   'tagline' : 'Examine a Unicode String'})
+                                                   'title': 'Unicode Decode',
+                                                   'tagline': 'Decode a Unicode String'})
     form = UnicodeTextForm()
     return render(request, 'home.html', {'form': form})
 
