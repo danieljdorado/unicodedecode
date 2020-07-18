@@ -1,7 +1,10 @@
 """Extensions of unicodedata."""
 
+import re
 import unicodedata as ud
 from Search.mappings import bidi, category
+
+
 
 
 def examen_unicode(text):
@@ -38,28 +41,49 @@ def get_normalization_form(string):
     return normalization_form
 
 
-UNICODE_ALIASES = {
-    'U+000A' : 'LINE FEED',
-    'U+000D' : 'CARRIAGE RETURN',
-    'U+0020' : 'SPACE',
-}
-
 def get_code_point(char, prefix=True):
     """Return character codepoint."""
     if prefix:
         return 'U+{:04X}'.format(ord(char))
     return '{:04X}'.format(ord(char))
 
+class Alias:
+    """Class to manipulate aliases"""
+
+    def __init__(self):
+        with open('Search/NameAliases.txt') as f:
+            self.raw = f.read()
+
+
+    def get_aliases(self, char):
+        """Return a list of aliases for a character"""
+
+        code_point = get_code_point(char, False)      
+        self.pattern = f'{code_point};([A-Z ]+);'
+        self.aliases = re.findall(self.pattern, self.raw, re.IGNORECASE)
+
+        return self.aliases
+
+    def get_alias(self, char):
+        """Return the first alias for a character"""
+        
+        aliases = self.get_aliases(char)
+
+        if aliases:
+            return aliases[0]
+        return "UNKNOWN"
+
+alias = Alias()
+
 
 def get_name(char):
     """Return Unicode character name or alias"""
-    code_point = get_code_point(char)
-    if code_point in UNICODE_ALIASES:
-        return UNICODE_ALIASES[code_point]
+
     try:
-        return ud.name(char)
+        name = ud.name(char)
     except: # pylint: disable=bare-except
-        return 'UNKNOWN'
+        name = alias.get_alias(char)
+    return name
 
 def get_category(char):
     """Return character category."""

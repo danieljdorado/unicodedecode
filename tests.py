@@ -84,7 +84,8 @@ class TestUnicodeName(TestCase):
             '😀' : 'GRINNING FACE',
             'ꖣ' : 'VAI SYLLABLE VU',
             '"' : 'QUOTATION MARK',
-            '	' : 'UNKNOWN',
+            '	' : 'CHARACTER TABULATION',
+            '˜': 'SMALL TILDE',
         }
 
 
