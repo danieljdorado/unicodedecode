@@ -5,8 +5,6 @@ import unicodedata as ud
 from Search.mappings import bidi, category
 
 
-
-
 def examen_unicode(text):
     """Returns a list of dictionaries for each unicode character."""
 
@@ -47,6 +45,7 @@ def get_code_point(char, prefix=True):
         return 'U+{:04X}'.format(ord(char))
     return '{:04X}'.format(ord(char))
 
+
 class Alias:
     """Class to manipulate aliases"""
 
@@ -72,6 +71,7 @@ class Alias:
         if aliases:
             return aliases[0]
         return "UNKNOWN"
+
 
 alias = Alias()
 
