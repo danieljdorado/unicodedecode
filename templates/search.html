@@ -7,7 +7,7 @@
         {% csrf_token %}
         {{ form }}
         <p>
-            <button id="decode-button" class="btn-large waves-effect waves-light orange">Decode</button>
+            <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Decode</button>
         </p>
         </form>
     </div>
@@ -23,7 +23,7 @@
         {% for x in text %}
             <tr>
                 <td>{{x.char}}</td>
-                <td><a href="{% url 'character' slug=x.hex %}">{{x.name}}</a></td>
+                <td><a href="{% url 'character' slug=x.hex %}" class="green-text text-darken-2">{{x.name}}</a></td>
                 <td>{{x.category}}</td>
                 <td>{{x.digit}}</td>
                 <td>{{x.bidi}}</td>
@@ -39,7 +39,7 @@
             {% if item == True %}
                 <span style="color: green;">{{ item }} &emsp;</span>
                     {% else  %}
-                    <span style="color: red;">{{ item }} &emsp;</span>
+                    <span style="color: green;">{{ item }} &emsp;</span>
                     {% endif %}
 
         {% endfor %}

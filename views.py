@@ -18,6 +18,7 @@ def search(request):
                                                    'normalization_form': normalization_form,
                                                    'title' : 'Unicode Decode',
                                                    'tagline' : 'Decode a Unicode String'})
+
     form = UnicodeTextForm()
     return render(request, 'home.html', {'form': form})
 
@@ -30,7 +31,13 @@ def tofu(request):
 def about(request):
     """About Page."""
     return render(request, 'about.html', {'title' : 'About',
-                                          'tagline' : 'Get To Know Us'})
+                                         'tagline' : 'Get To Know Us'})
+
+def terms(request):
+        """Terms and Conditions Page."""
+        return render(request, 'terms.html', {'title' : 'Terms and Conditions',
+                                              'tagline' : 'User Agreements'})
+
 
 def character(request, slug):
     """Character page."""
@@ -38,3 +45,4 @@ def character(request, slug):
     char = chr(int(slug, 16))
     char_desc = u.get_character_page_description(char)
     return render(request, 'character.html', char_desc)
+
