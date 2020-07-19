@@ -26,21 +26,16 @@ def tofu(request):
     """Tofu page."""
     return render(request, 'tofu.html', {'title' : 'Tofu',
                                          'tagline' : 'Not Just For Eating'})
+
 def about(request):
     """About Page."""
     return render(request, 'about.html', {'title' : 'About',
                                          'tagline' : 'Get To Know Us'})
 
-def Terms(request):
-    """Terms and Conditions Page."""
-    return render(request, 'terms.html', {'title' : 'Terms and Conditions',
-                                         'tagline' : 'User Agreements'})
-
 def terms(request):
         """Terms and Conditions Page."""
         return render(request, 'terms.html', {'title' : 'Terms and Conditions',
                                               'tagline' : 'User Agreements'})
-
 
 def character(request, slug):
     """Character page."""

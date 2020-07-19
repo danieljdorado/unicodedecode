@@ -1,10 +1,12 @@
+{% load staticfiles %}
 <!-- Navigation Bar -->
 {% block navigation %}
-  <nav class="light-blue lighten-1" role="navigation">
-      <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Logo</a>
+  <nav class="grey lighten-4" role="navigation">
+      <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo  indigo-text text-darken-4"><img src=" {% static 'img/unicode.logo.png' %}" /></a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
+          <li><a href="/" class="grey-text text-darken-2">Home</a></li>
+          <li><a href="/about" class ="grey-text text-darken-2">About</a></li>
+          <li><a href="/tofu" class ="grey-text text-darken-2">Tofu</a></li>
         </ul>
 
         <ul id="nav-mobile" class="sidenav">
