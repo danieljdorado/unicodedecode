@@ -3,14 +3,16 @@
 {% block content %}
 
 
-<div class="char-box">
+<div class="char-box grey lighten-4">
 
   {{ char }}
  
 </div>
-
+<div  style='text-align: left;'>
+  <a href="javascript:history.back()" class='green-text text-darken-2'>Go Back</a>
+</div>
+<br>
 <div class="card horizontal">
-
   <div class="card-stacked">
     <div class="card-content">
       <table class="responsive-table highlight">
@@ -23,6 +25,10 @@
             <td>{{ name }}</td>
           </tr>
           <tr>
+            <td>Character:</td>
+            <td>{{ char }}</td>
+          </tr>
+          <tr>
             <td>Category:</td>
             <td>{{ category }}</td>
           </tr>
@@ -31,9 +37,28 @@
             <td>{{ digit }}</td>
           </tr>
           <tr>
-            <td>Direction:</td>
-            <td>{{ direction }}</td>
+            <td>Decomposition:</td>
+            <td>{{ decomposition }}</td>
           </tr>
+          <tr>
+            <td>Integer:</td>
+            <td>{{ integer }}</td>
+          </tr>
+          <tr>
+            <td>Lower:</td>
+            <td>{{ lower }}</td>
+          </tr>
+          <tr>
+            <td>Upper:</td>
+            <td>{{ upper }}</td>
+          </tr>
+          <td>Aliases:</td>
+          <td>{{ aliases }}</td>
+        </tr>
+      </tr>
+      <td>East Asian Width:</td>
+      <td>{{ east_asian }}</td>
+    </tr>
         </tbody>
       </table>
     </div>

@@ -2,7 +2,7 @@
 
 import re
 import unicodedata as ud
-from Search.mappings import bidi, category
+from Search.mappings import bidi, category, east_asian_categories
 
 
 def examen_unicode(text):
@@ -55,13 +55,15 @@ class Alias:
             self.raw = f.read()
 
 
-    def get_aliases(self, char):
+    def get_aliases(self, char, format=False):
         """Return a list of aliases for a character"""
 
         code_point = get_code_point(char, False)      
         self.pattern = f'{code_point};([A-Z ]+);'
         self.aliases = re.findall(self.pattern, self.raw, re.IGNORECASE)
 
+        if format:
+            return ', '.join(self.aliases)
         return self.aliases
 
     def get_alias(self, char):
@@ -109,6 +111,15 @@ def get_direction(char):
     except: # pylint: disable=bare-except
         return ''
 
+
+def get_east_asian_width(char):
+    """Return East Asian Width Attribute."""
+    try:
+        width = ud.east_asian_width(char)
+        return east_asian_categories[width]
+    except: # pylint: disable=bare-except
+        return ud.east_asian_width(char)
+
 def get_character_page_description(char):
     """Return dictionary of character attributes"""
     return {
@@ -119,4 +130,10 @@ def get_character_page_description(char):
         'category' : get_category(char),
         'digit': get_digit(char),
         'direction': get_direction(char),
+        'integer': ord(char),
+        'upper': char.upper(),
+        'lower' : char.lower(),
+        'decomposition': ud.decomposition(char),
+        'aliases': alias.get_aliases(char, True),
+        'east_asian': get_east_asian_width(char),
     }

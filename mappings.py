@@ -46,3 +46,12 @@ category = {
     'Co': 'PRIVATE USE',
     'Cn': 'UNASSIGNED',
 }
+
+east_asian_categories = {
+    'F': 'East Asian Fullwidth',
+    'H': 'East Asian Halfwidth',
+    'W': 'East Asian Wide',
+    'Na': 'East Asian Narrow',
+    'A': 'East Asian Ambiguous',
+    'N': 'Non East Asian',
+}
