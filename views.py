@@ -39,11 +39,6 @@ def terms(request):
         return render(request, 'terms.html', {'title' : 'Terms and Conditions',
                                               'tagline' : 'User Agreements'})
 
-def terms(request):
-        """Terms and Conditions Page."""
-        return render(request, 'terms.html', {'title' : 'Terms and Conditions',
-                                              'tagline' : 'User Agreements'})
-
 
 def character(request, slug):
     """Character page."""
