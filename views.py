@@ -5,6 +5,25 @@ from Search.forms import UnicodeTextForm
 import Search.unicode_util as u
 
 
+def about(request):
+    """About Page."""
+    return render(request, 'about.html', {'title' : 'About',
+                                         'tagline' : 'Get To Know Us'})
+
+
+def character(request, slug):
+    """Character page."""
+
+    char = chr(int(slug, 16))
+    char_desc = u.get_character_page_description(char)
+    return render(request, 'character.html', char_desc)
+
+def privacy(request):
+        """Terms and Conditions Page."""
+        return render(request, 'privacy.html', {'title' : 'Privacy Policy',
+                                              'tagline' : "We're Not Tracking"})
+
+
 def search(request):
     """Home and search."""
     if request.method == 'POST':
@@ -23,26 +42,13 @@ def search(request):
     return render(request, 'home.html', {'form': form})
 
 
-def tofu(request):
-    """Tofu page."""
-    return render(request, 'tofu.html', {'title' : 'Tofu',
-                                         'tagline' : 'Not Just For Eating'})
-
-def about(request):
-    """About Page."""
-    return render(request, 'about.html', {'title' : 'About',
-                                         'tagline' : 'Get To Know Us'})
-
 def terms(request):
         """Terms and Conditions Page."""
         return render(request, 'terms.html', {'title' : 'Terms and Conditions',
                                               'tagline' : 'User Agreements'})
 
 
-def character(request, slug):
-    """Character page."""
-
-    char = chr(int(slug, 16))
-    char_desc = u.get_character_page_description(char)
-    return render(request, 'character.html', char_desc)
-
+def tofu(request):
+    """Tofu page."""
+    return render(request, 'tofu.html', {'title' : 'Tofu',
+                                         'tagline' : 'Not Just For Eating'})
