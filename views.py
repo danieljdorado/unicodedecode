@@ -32,7 +32,12 @@ def tofu(request):
 def about(request):
     """About Page."""
     return render(request, 'about.html', {'title' : 'About',
-                                          'tagline' : 'Get To Know Us'})
+                                         'tagline' : 'Get To Know Us'})
+
+def terms(request):
+        """Terms and Conditions Page."""
+        return render(request, 'terms.html', {'title' : 'Terms and Conditions',
+                                              'tagline' : 'User Agreements'})
 
 def terms(request):
         """Terms and Conditions Page."""
