@@ -2,7 +2,7 @@
 
 import re
 import unicodedata as ud
-from Search.mappings import bidi, category, east_asian_categories
+from decode.mappings import bidi, category, east_asian_categories
 
 
 def examen_unicode(text):
@@ -51,7 +51,7 @@ class Alias:
     """Class to manipulate aliases"""
 
     def __init__(self):
-        with open('Search/NameAliases.txt') as f:
+        with open('decode/NameAliases.txt') as f:
             self.raw = f.read()
 
 

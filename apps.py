@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class SearchConfig(AppConfig):
-    name = 'Search'
+class DecodeConfig(AppConfig):
+    name = 'decode'
+    
