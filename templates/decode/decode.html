@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'decode/base.html' %}
 
 {% block content %}
 
     <div class="row center">
-        <form action="{% url 'search' %}" method="post">
+        <form action="{% url 'decode' %}" method="post">
         {% csrf_token %}
         {{ form }}
         <p>
