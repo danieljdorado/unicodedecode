@@ -1,9 +1,11 @@
 """Extensions of unicodedata."""
 
+import os
 import re
 import unicodedata as ud
 from decode.mappings import bidi, category, east_asian_categories
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def examen_unicode(text):
     """Returns a list of dictionaries for each unicode character."""
@@ -51,7 +53,7 @@ class Alias:
     """Class to manipulate aliases"""
 
     def __init__(self):
-        with open('decode/NameAliases.txt') as f:
+        with open(os.path.join(BASE_DIR,'decode/files/NameAliases.txt'), encoding='utf-8') as f:
             self.raw = f.read()
 
 
