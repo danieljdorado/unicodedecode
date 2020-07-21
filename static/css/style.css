@@ -13,10 +13,45 @@
 	font-size: inherit;
 }
 
-.page-footer {
-  position: fixed;
-  bottom: 0;
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1280px;
+  width: 90%;
+}
+
+table.highlight tbody tr:hover {
+  background-color: #fffaef !important;
+}
+
+.row {
   width: 100%;
+}
+
+th.result td.result {
+  border-left-style: solid;
+  border-left-color: #eee;
+  border-left-width: 1px;
+}
+
+table.striped>tbody>tr.winner {
+  background-color: #d0edbd;
+}
+
+table.striped>tbody>tr:nth-child(odd).winner {
+  background-color: #d5f4c1;
+}
+@media (min-width: 768px) and (min-height: 500px) {
+  .page-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
 }
 
 .char-box {
