@@ -12336,12 +12336,3 @@ $jscomp.polyfill = function (e, r, p, m) {
   Range.init($('input[type=range]'));
 })(cash, M.anime);
 
-$(document).ready(function() {
-  $(".dropdown-trigger").dropdown();
-});
-$(window).on('load resize', function() {
-  $('body').css({paddingBottom: $(window).width() >= 768 && $(window).height() >= 500 ?
-      $('footer').outerHeight() + 'px' : 
-      '0'
-  })
-})
