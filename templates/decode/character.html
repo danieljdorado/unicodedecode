@@ -12,57 +12,51 @@
   <a href="javascript:history.back()" class='green-text text-darken-2'>Go Back</a>
 </div>
 <br>
-<div class="card horizontal">
-  <div class="card-stacked">
-    <div class="card-content">
-      <table class="responsive-table highlight">
-        <tbody>
-          <tr>
-            <th>Unicode Data</th>
-          </tr>
-          <tr>
-            <td>Name:</td>
-            <td>{{ name }}</td>
-          </tr>
-          <tr>
-            <td>Character:</td>
-            <td>{{ char }}</td>
-          </tr>
-          <tr>
-            <td>Category:</td>
-            <td>{{ category }}</td>
-          </tr>
-          <tr>
-            <td>Digit:</td>
-            <td>{{ digit }}</td>
-          </tr>
-          <tr>
-            <td>Decomposition:</td>
-            <td>{{ decomposition }}</td>
-          </tr>
-          <tr>
-            <td>Integer:</td>
-            <td>{{ integer }}</td>
-          </tr>
-          <tr>
-            <td>Lower:</td>
-            <td>{{ lower }}</td>
-          </tr>
-          <tr>
-            <td>Upper:</td>
-            <td>{{ upper }}</td>
-          </tr>
-          <td>Aliases:</td>
-          <td>{{ aliases }}</td>
-        </tr>
-      </tr>
+<h5 class="header center green-text text-darken-2">Character Data</h5>
+<table class="responsive-table highlight">
+  <tbody>
+    <tr>
+      <td>Name:</td>
+      <td>{{ name }}</td>
+    </tr>
+    <tr>
+      <td>Character:</td>
+      <td>{{ char }}</td>
+    </tr>
+    <tr>
+      <td>Category:</td>
+      <td>{{ category }}</td>
+    </tr>
+    <tr>
+      <td>Digit:</td>
+      <td>{{ digit }}</td>
+    </tr>
+    <tr>
+      <td>Decomposition:</td>
+      <td>{{ decomposition }}</td>
+    </tr>
+    <tr>
+      <td>Integer:</td>
+      <td>{{ integer }}</td>
+    </tr>
+    <tr>
+      <td>Lower:</td>
+      <td>{{ lower }}</td>
+    </tr>
+    <tr>
+      <td>Upper:</td>
+      <td>{{ upper }}</td>
+    </tr>
+    <tr>
+      <td>Aliases:</td>
+      <td>{{ aliases }}</td>
+    </tr>
+    <tr>
       <td>East Asian Width:</td>
       <td>{{ east_asian }}</td>
     </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+  </tbody>
+</table>
+
 
 {% endblock %}
