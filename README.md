@@ -3,7 +3,7 @@
 ## Django Website for Unicode Character Search 
 
 
-Type/Paste in text and click "Decode".
+Type or paste text in the textbox and click "Decode".
 
 A table will generate of every character in the text. This provides a method to analyze a string's characters.
 
@@ -21,7 +21,7 @@ Why hello there! My name is Daniel and I’m into programming and linguistics. I
 
 I like building useful tools.
 
-## Acknowledgemet
+## Acknowledgement
 
 -[Cynthia McDonald](https://github.com/mcdonald-cyber) for providing Frontend support and logo design.
 
