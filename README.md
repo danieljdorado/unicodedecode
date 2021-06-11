@@ -23,5 +23,5 @@ I like building useful tools.
 
 ## Acknowledgement
 
--[Cynthia McDonald](https://github.com/mcdonald-cyber) for providing Frontend support and logo design.
+- [Cynthia McDonald](https://github.com/mcdonald-cyber) for providing Frontend support and logo design.
 
