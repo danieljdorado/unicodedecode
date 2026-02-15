@@ -1,4 +1,8 @@
-"""Views."""
+"""Unicode decode app views.
+
+Handles rendering of the about, character, decode, privacy, terms, and tofu
+pages, and processes Unicode text decoding form submissions.
+"""
 
 from django.shortcuts import render
 from unicodedecode.forms import UnicodeTextForm
@@ -6,26 +10,50 @@ import unicodedecode.unicode_util as u
 
 
 def about(request):
-    """About Page."""
+    """Render the About page.
+
+    Returns:
+        HttpResponse: Rendered about.html with title and tagline context.
+    """
     return render(request, 'decode/about.html', {'title' : 'About',
                                          'tagline' : 'Get To Know Us'})
 
 
 def character(request, slug):
-    """Character page."""
+    """Render the character detail page for a Unicode code point.
 
+    Args:
+        request: The HTTP request.
+        slug: Hex string of the Unicode code point (e.g. '0041' for 'A').
+
+    Returns:
+        HttpResponse: Rendered character.html with character description context.
+    """
     char = chr(int(slug, 16))
     char_desc = u.get_character_page_description(char)
     return render(request, 'decode/character.html', char_desc)
 
+
 def privacy(request):
-        """Terms and Conditions Page."""
-        return render(request, 'decode/privacy.html', {'title' : 'Privacy Policy',
+    """Render the Privacy Policy page.
+
+    Returns:
+        HttpResponse: Rendered privacy.html with title and tagline context.
+    """
+    return render(request, 'decode/privacy.html', {'title' : 'Privacy Policy',
                                               'tagline' : "We're Not Tracking"})
 
 
 def decode(request):
-    """Home and decode."""
+    """Handle the decode page: show form on GET, decode Unicode text on POST.
+
+    GET returns the home form. POST validates the form, normalizes and analyzes
+    the submitted text, then renders the decode results.
+
+    Returns:
+        HttpResponse: Rendered home.html (GET) or decode.html (POST) with form
+            and optionally decoded text and normalization form context.
+    """
     if request.method == 'POST':
         form = UnicodeTextForm(request.POST)
         if form.is_valid():
@@ -43,12 +71,20 @@ def decode(request):
 
 
 def terms(request):
-        """Terms and Conditions Page."""
-        return render(request, 'decode/terms.html', {'title' : 'Terms and Conditions',
+    """Render the Terms and Conditions page.
+
+    Returns:
+        HttpResponse: Rendered terms.html with title and tagline context.
+    """
+    return render(request, 'decode/terms.html', {'title' : 'Terms and Conditions',
                                               'tagline' : 'User Agreements'})
 
 
 def tofu(request):
-    """Tofu page."""
+    """Render the Tofu (missing glyphs) information page.
+
+    Returns:
+        HttpResponse: Rendered tofu.html with title and tagline context.
+    """
     return render(request, 'decode/tofu.html', {'title' : 'Tofu',
                                          'tagline' : 'Not Just For Eating'})
