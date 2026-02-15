@@ -5,8 +5,8 @@ pages, and processes Unicode text decoding form submissions.
 """
 
 from django.shortcuts import render
-from unicodedecode.forms import UnicodeTextForm
-import unicodedecode.unicode_util as u
+from decode.forms import UnicodeTextForm
+import decode.unicode_util as u
 
 
 def about(request):

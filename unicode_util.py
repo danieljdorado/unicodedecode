@@ -7,9 +7,9 @@ bidirectional class, East Asian width, and aliases from the Unicode database.
 import os
 import re
 import unicodedata as ud
-from unicodedecode.mappings import bidi, category, east_asian_categories
+from decode.mappings import bidi, category, east_asian_categories
 
-# App package directory (unicodedecode/)
+# App package directory (decode/)
 _APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def examen_unicode(text):

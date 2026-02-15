@@ -17,8 +17,8 @@ Unicode Decode lets you inspect any text character by character: see each charac
 ## Tech stack
 
 - **Backend:** Django (3.0–5.0), Python 3.
-- **Frontend:** Materialize CSS (`unicodedecode/static/css/`, `unicodedecode/static/js/`).
-- **Data:** Python standard library `unicodedata`, plus app utilities and `unicodedecode/files/NameAliases.txt` for character names and aliases.
+- **Frontend:** Materialize CSS (`decode/static/css/`, `decode/static/js/`).
+- **Data:** Python standard library `unicodedata`, plus app utilities and `decode/files/NameAliases.txt` for character names and aliases.
 
 ## Getting started
 
@@ -48,12 +48,12 @@ Unicode Decode lets you inspect any text character by character: see each charac
 
 ## Project structure
 
-- **Project root:** `manage.py`, `requirements.txt`, `USearch/` (Django settings and root URLs), `unicodedecode/` (app).
-- **App (`unicodedecode/`):** `views.py`, `forms.py`, `urls.py`, `unicode_util.py`, `mappings.py`, `templates/decode/`, `static/`, `files/NameAliases.txt`.
+- **Project root:** `manage.py`, `requirements.txt`, `ud/` (Django settings and root URLs), `decode/` (app).
+- **App (`decode/`):** `views.py`, `forms.py`, `urls.py`, `unicode_util.py`, `mappings.py`, `templates/decode/`, `static/`, `files/NameAliases.txt`.
 
 ## Testing
 
-Tests are in `unicodedecode/tests.py`. From the project root run:
+Tests are in `decode/tests.py`. From the project root run:
 
 - `pytest`, or
 - `python manage.py test`

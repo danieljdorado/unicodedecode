@@ -1,9 +1,9 @@
-"""Backend tests for unicodedecode app."""
+"""Backend tests for decode app."""
 
 from django.test import TestCase, Client
 from django.urls import reverse
 import unicodedata as ud
-import unicodedecode.unicode_util as u
+import decode.unicode_util as u
 
 
 class UnicodeVersionTestCase(TestCase):

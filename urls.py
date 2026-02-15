@@ -1,5 +1,5 @@
 from django.urls import path
-from unicodedecode import views
+from decode import views
 
 urlpatterns = [
     path('', views.decode, name='decode'),
