@@ -51,7 +51,7 @@ def get_normalization_form(string):
         the string is normalized in that form, else False.
     """
     forms = ['NFC', 'NFKC', 'NFD', 'NFKD']
-    normalization_form = dict()
+    normalization_form = {}
 
     for form in forms:
         if ud.is_normalized(form, string):
@@ -72,8 +72,8 @@ def get_code_point(char, prefix=True):
         Code point as string, e.g. 'U+0061' or '0061'.
     """
     if prefix:
-        return 'U+{:04X}'.format(ord(char))
-    return '{:04X}'.format(ord(char))
+        return f'U+{ord(char):04X}'
+    return f'{ord(char):04X}'
 
 
 class Alias:
