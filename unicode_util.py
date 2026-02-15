@@ -6,7 +6,7 @@ bidirectional class, East Asian width, and aliases from the Unicode database.
 
 import os
 import re
-import unicodedata as ud
+import unicodedata2 as ud
 from decode.mappings import bidi, category, east_asian_categories
 
 # App package directory (decode/)
@@ -40,6 +40,19 @@ def examen_unicode(text):
 
 
 
+def is_normalized(form, s):
+    """Return whether the string is already in the given normalization form.
+
+    Args:
+        form: Unicode normalization form name ('NFC', 'NFKC', 'NFD', or 'NFKD').
+        s: Unicode string to check.
+
+    Returns:
+        True if s is normalized in that form, False otherwise.
+    """
+    return s == ud.normalize(form, s)
+
+
 def get_normalization_form(string):
     """Report which Unicode normalization forms the string is already in.
 
@@ -54,7 +67,7 @@ def get_normalization_form(string):
     normalization_form = {}
 
     for form in forms:
-        if ud.is_normalized(form, string):
+        if is_normalized(form, string):
             normalization_form[form] = True
         else:
             normalization_form[form] = False

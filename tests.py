@@ -2,20 +2,16 @@
 
 from django.test import TestCase, Client
 from django.urls import reverse
-import unicodedata as ud
+import unicodedata2 as ud
 import decode.unicode_util as u
 
 
 class UnicodeVersionTestCase(TestCase):
-    """Check the footer template version."""
-    def setUp(self):
-        # Footer template unicode version.
-        # Update version manually in the template if tests fail.
-        self.unicode_version = "12.1.0"
-
-    def test_unicode_version_exact(self):
-        """Current unicode version matches expected for footer."""
-        self.assertEqual(ud.unidata_version, self.unicode_version)
+    """Check the footer template version comes from unicodedata2."""
+    def test_footer_shows_unicode_version(self):
+        """Footer displays current unicodedata2 version."""
+        response = self.client.get(reverse('decode'))
+        self.assertContains(response, ud.unidata_version)
 
     def test_unicode_version_format(self):
         """Unicode version string has expected x.y.z format."""
@@ -44,7 +40,9 @@ class TestCodePoints(TestCase):
             'ש': 'U+05E9',   # HEBREW LETTER SHIN
             'ۻ': 'U+06FB',   # ARABIC LETTER DAD WITH DOT BELOW
             ' ': 'U+0020',   # SPACE
-            '😀': 'U+1F600',  # GRINNING FACE
+            '😀': 'U+1F600',   # GRINNING FACE
+            '🫪': 'U+1FAEA',    # DISTORTED FACE
+            '🫍': 'U+1FACD'   # ORCA
         }
 
     def test_get_code_point_with_prefix(self):
@@ -71,6 +69,130 @@ class TestCodePoints(TestCase):
         # U+1F600 GRINNING FACE
         self.assertEqual(u.get_code_point('😀', prefix=False), '1F600')
         self.assertEqual(u.get_code_point('😀', prefix=True), 'U+1F600')
+
+
+class TestIsNormalized(TestCase):
+    """Unit tests for is_normalized(form, s)."""
+
+    def test_empty_string_all_forms(self):
+        """Empty string is normalized in every form."""
+        for form in ('NFC', 'NFKC', 'NFD', 'NFKD'):
+            with self.subTest(form=form):
+                self.assertTrue(u.is_normalized(form, ''))
+
+    def test_ascii_all_forms(self):
+        """ASCII letters and digits are typically normalized in all forms."""
+        for s in ('a', 'Z', '0', '9', 'Hello', ' \t\n'):
+            with self.subTest(s=repr(s)):
+                for form in ('NFC', 'NFKC', 'NFD', 'NFKD'):
+                    self.assertTrue(u.is_normalized(form, s), f'{form} {repr(s)}')
+
+    def test_nfc_precomposed_is_nfc(self):
+        """Precomposed characters (single codepoint) are NFC."""
+        # é = U+00E9 (single precomposed char)
+        self.assertTrue(u.is_normalized('NFC', 'é'))
+        self.assertTrue(u.is_normalized('NFC', 'ñ'))
+        self.assertTrue(u.is_normalized('NFC', 'ü'))
+
+    def test_nfc_decomposed_is_not_nfc(self):
+        """Decomposed sequence (base + combining) is not NFC."""
+        # e + U+0301 COMBINING ACUTE
+        decomposed_e_acute = 'e\u0301'
+        self.assertFalse(u.is_normalized('NFC', decomposed_e_acute))
+        self.assertEqual(ud.normalize('NFC', decomposed_e_acute), 'é')
+
+    def test_nfd_decomposed_is_nfd(self):
+        """Decomposed sequence is NFD."""
+        decomposed_e_acute = 'e\u0301'
+        self.assertTrue(u.is_normalized('NFD', decomposed_e_acute))
+
+    def test_nfd_precomposed_is_not_nfd(self):
+        """Precomposed character is not NFD (decomposed form has multiple codepoints)."""
+        self.assertFalse(u.is_normalized('NFD', 'é'))
+        self.assertEqual(ud.normalize('NFD', 'é'), 'e\u0301')
+
+    def test_nfkc_compatibility_composite(self):
+        """Compatibility composite (e.g. ﬁ) is NFC but not NFKC."""
+        # U+FB01 LATIN SMALL LIGATURE FI
+        fi_ligature = '\uFB01'
+        self.assertTrue(u.is_normalized('NFC', fi_ligature))
+        self.assertFalse(u.is_normalized('NFKC', fi_ligature))
+        self.assertEqual(ud.normalize('NFKC', fi_ligature), 'fi')
+
+    def test_nfkc_after_normalize_is_normalized(self):
+        """String normalized to NFKC is is_normalized('NFKC', ...) True."""
+        fi_ligature = '\uFB01'
+        nfkc = ud.normalize('NFKC', fi_ligature)
+        self.assertTrue(u.is_normalized('NFKC', nfkc))
+
+    def test_nfkd_decomposed_compatibility(self):
+        """NFKD decomposes compatibility characters."""
+        fi_ligature = '\uFB01'
+        self.assertFalse(u.is_normalized('NFKD', fi_ligature))
+        nfkd = ud.normalize('NFKD', fi_ligature)
+        self.assertTrue(u.is_normalized('NFKD', nfkd))
+
+    def test_is_normalized_equals_normalize_equality(self):
+        """is_normalized(form, s) matches (s == ud.normalize(form, s))."""
+        cases = [
+            '',
+            'a',
+            'é',
+            'e\u0301',
+            '\uFB01',   # ﬁ
+            'ẛ\u0323',  # ẛ̣ (dot above + dot below)
+            'café',
+            'cafe\u0301',
+            '😀',
+            '2\u2075',   # 2⁵
+        ]
+        for s in cases:
+            for form in ('NFC', 'NFKC', 'NFD', 'NFKD'):
+                with self.subTest(form=form, s=repr(s)):
+                    expected = (s == ud.normalize(form, s))
+                    self.assertIs(u.is_normalized(form, s), expected)
+
+    def test_each_form_independently(self):
+        """Each form gives correct True/False for known strings."""
+        # (string, form, expected)
+        cases = [
+            ('é', 'NFC', True),
+            ('é', 'NFD', False),
+            ('e\u0301', 'NFC', False),
+            ('e\u0301', 'NFD', True),
+            ('\uFB01', 'NFC', True),
+            ('\uFB01', 'NFKC', False),
+            ('fi', 'NFKC', True),
+            ('ẛ\u0323', 'NFC', True),
+            ('ẛ\u0323', 'NFD', False),
+            ('ẛ\u0323', 'NFKD', False),
+        ]
+        for s, form, expected in cases:
+            with self.subTest(form=form, s=repr(s), expected=expected):
+                self.assertIs(u.is_normalized(form, s), expected)
+
+    def test_return_type_bool(self):
+        """is_normalized returns bool."""
+        self.assertIsInstance(u.is_normalized('NFC', ''), bool)
+        self.assertIsInstance(u.is_normalized('NFC', 'x'), bool)
+        self.assertIsInstance(u.is_normalized('NFD', 'é'), bool)
+
+    def test_multiple_combining_marks(self):
+        """Multiple combining marks: NFD string is normalized in NFD only when canonical."""
+        # a + acute + diaeresis (canonical order)
+        a_acute_diaeresis = 'a\u0301\u0308'
+        nfd = ud.normalize('NFD', a_acute_diaeresis)
+        self.assertTrue(u.is_normalized('NFD', nfd))
+        # If we had wrong order, might not be NFD
+        self.assertTrue(u.is_normalized('NFD', ud.normalize('NFD', 'ä\u0301')))
+
+    def test_emoji_supplementary_plane(self):
+        """Supplementary plane (e.g. emoji) can be NFC/NFD."""
+        emoji = '😀'
+        self.assertTrue(u.is_normalized('NFC', emoji))
+        self.assertTrue(u.is_normalized('NFD', emoji))
+        nfd_emoji = ud.normalize('NFD', emoji)
+        self.assertTrue(u.is_normalized('NFD', nfd_emoji))
 
 
 class TestNormalization(TestCase):
