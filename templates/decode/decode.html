@@ -13,13 +13,18 @@
     </div>
 
     <table class="responsive-table highlight">
-        <th>Character</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Digit</th>
-        <th>Direction</th>
-        <th>Integer</th>
-        <th>Code Point</th>
+        <thead>
+          <tr>
+            <th>Character</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Digit</th>
+            <th>Direction</th>
+            <th>Integer</th>
+            <th>Code Point</th>
+          </tr>
+        </thead>
+        <tbody>
         {% for x in text %}
             <tr>
                 <td>{{x.char}}</td>
@@ -29,8 +34,9 @@
                 <td>{{x.bidi}}</td>
                 <td>{{x.ord}}</td>
                 <td>{{x.code_point}}</td>
-        </tr>
+            </tr>
         {% endfor %}
+        </tbody>
     </table>
 <br>
     <div class="row">
