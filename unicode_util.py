@@ -61,13 +61,13 @@ class Alias:
     def get_aliases(self, char, format=False):
         """Return a list of aliases for a character"""
 
-        code_point = get_code_point(char, False)      
-        self.pattern = f'{code_point};([A-Z ]+);'
-        self.aliases = re.findall(self.pattern, self.raw, re.IGNORECASE)
+        code_point = get_code_point(char, False)
+        pattern = f'{code_point};([A-Z ]+);'
+        aliases = re.findall(pattern, self.raw, re.IGNORECASE)
 
         if format:
-            return ', '.join(self.aliases)
-        return self.aliases
+            return ', '.join(aliases)
+        return aliases
 
     def get_alias(self, char):
         """Return the first alias for a character"""
@@ -87,7 +87,7 @@ def get_name(char):
 
     try:
         name = ud.name(char)
-    except: # pylint: disable=bare-except
+    except ValueError:
         name = alias.get_alias(char)
     return name
 
@@ -95,7 +95,7 @@ def get_category(char):
     """Return character category."""
     try:
         return category[ud.category(char)]
-    except: # pylint: disable=bare-except
+    except KeyError:
         return ''
 
 
@@ -103,7 +103,7 @@ def get_digit(char):
     """Return character digit."""
     try:
         return ud.digit(char, '')
-    except: # pylint: disable=bare-except
+    except (ValueError, TypeError):
         return ''
 
 
@@ -111,7 +111,7 @@ def get_direction(char):
     """Return character direction."""
     try:
         return bidi[ud.bidirectional(char)]
-    except: # pylint: disable=bare-except
+    except KeyError:
         return ''
 
 
@@ -119,9 +119,9 @@ def get_east_asian_width(char):
     """Return East Asian Width Attribute."""
     try:
         width = ud.east_asian_width(char)
-        return east_asian_categories[width]
-    except: # pylint: disable=bare-except
-        return ud.east_asian_width(char)
+        return east_asian_categories.get(width, width)
+    except (ValueError, TypeError):
+        return ''
 
 def get_character_page_description(char):
     """Return dictionary of character attributes"""
