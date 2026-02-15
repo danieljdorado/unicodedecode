@@ -7,15 +7,11 @@ import decode.unicode_util as u
 
 
 class UnicodeVersionTestCase(TestCase):
-    """Check the footer template version."""
-    def setUp(self):
-        # Footer template unicode version.
-        # Update version manually in the template if tests fail.
-        self.unicode_version = "17.0.0"
-
-    def test_unicode_version_exact(self):
-        """Current unicode version matches expected for footer."""
-        self.assertEqual(ud.unidata_version, self.unicode_version)
+    """Check the footer template version comes from unicodedata2."""
+    def test_footer_shows_unicode_version(self):
+        """Footer displays current unicodedata2 version."""
+        response = self.client.get(reverse('decode'))
+        self.assertContains(response, ud.unidata_version)
 
     def test_unicode_version_format(self):
         """Unicode version string has expected x.y.z format."""
