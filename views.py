@@ -64,7 +64,7 @@ def decode(request):
                                                    'text': text,
                                                    'normalization_form': normalization_form,
                                                    'title' : 'Unicode Decode',
-                                                   'tagline' : 'Decode a Unicode String'})
+                                                   'tagline' : 'See every character behind your text instantly'})
 
     form = UnicodeTextForm()
     return render(request, 'decode/home.html', {'form': form})
