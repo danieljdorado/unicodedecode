@@ -1,25 +1,25 @@
-
 {% extends 'decode/base.html' %}
-
-{% block content %}
 {% load static %}
 
+{% block content %}
+  <div class="container">
+    <div class="section">
+      <p class="flow-text">
+        Unicode Decode is a tool designed to explore text data quickly and easily.
+        Paste text on the <a href="{% url 'decode' %}" class="green-text text-darken-2">home page</a> to see every
+        character and normalization form. We hope you'll find it useful.
+      </p>
 
-<p class="flow-text">
-  Unicode Decode is a tool designed to explore text data quickly and easily. We
-  hope you'll find it useful.
-</p>
+      <p class="flow-text">
+        To contribute or report problems, see the project's
+        <a href="https://github.com/danieljdorado/unicodedecode" class="green-text text-darken-2">GitHub</a>.
+      </p>
 
-<p class="flow-text">
-  If you're interested in getting involved and contributing, take a look at the project's
-  <a href='https://github.com/danieljdorado/unicodedecode' class='green-text text-darken-2'>GitHub</a>.
-</p>
+      <div class="row center">
+        <img src="{% static 'img/unicode.logolarge.png' %}" alt="Unicode Decode logo" class="responsive-img about-logo" />
+      </div>
 
-<p class="flow-text">
-  Problems? Maybe submit a fix on the project's
-  <a href='https://github.com/danieljdorado/unicodedecode'  class='green-text text-darken-2'>GitHub</a>.
-</p>
-
-<img src=" {% static 'img/unicode.logolarge.png' %}"/>
-
+      <p class="flow-text grey-text text-darken-1">Last updated: 2/15/2026</p>
+    </div>
+  </div>
 {% endblock %}
