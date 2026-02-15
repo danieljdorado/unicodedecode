@@ -13,7 +13,7 @@
     </div>
 
     <div class="section">
-        <h5 class="header col s12 green-text text-darken-2">Code Point Details</h5>
+        <h5 class="header col s12 green-text text-darken-2">Character Details</h5>
         <table class="responsive-table highlight codepoint-details-table">
             <thead>
               <tr>
@@ -29,13 +29,13 @@
             <tbody>
             {% for x in text %}
                 <tr>
-                    <td data-label="Character">{{x.char}}</td>
-                    <td data-label="Name"><a href="{% url 'codepoint' slug=x.hex %}" class="green-text text-darken-2">{{x.name}}</a></td>
-                    <td data-label="Category">{{x.category}}</td>
-                    <td data-label="Digit">{{x.digit}}</td>
-                    <td data-label="Direction">{{x.bidi}}</td>
-                    <td data-label="Integer">{{x.ord}}</td>
-                    <td data-label="Code Point">{{x.code_point}}</td>
+                    <td data-label="Character">{{ x.char|default:"N/A" }}</td>
+                    <td data-label="Name"><a href="{% url 'codepoint' slug=x.hex %}" class="green-text text-darken-2">{{ x.name|default:"N/A" }}</a></td>
+                    <td data-label="Category">{{ x.category|default:"N/A" }}</td>
+                    <td data-label="Digit">{{ x.digit|default:"N/A" }}</td>
+                    <td data-label="Direction">{{ x.bidi|default:"N/A" }}</td>
+                    <td data-label="Integer">{{ x.ord|default:"N/A" }}</td>
+                    <td data-label="Code Point">{{ x.code_point|default:"N/A" }}</td>
                 </tr>
             {% endfor %}
             </tbody>
