@@ -254,7 +254,7 @@ class TestAlias(TestCase):
 
 
 class TestGetCharacterPageDescription(TestCase):
-    """get_character_page_description for character detail page."""
+    """get_character_page_description for codepoint detail page."""
     REQUIRED_KEYS = {
         'title', 'tagline', 'char', 'name', 'category', 'digit',
         'direction', 'integer', 'upper', 'lower', 'decomposition',
@@ -262,7 +262,7 @@ class TestGetCharacterPageDescription(TestCase):
     }
 
     def test_returns_all_keys(self):
-        """Returned dict has all keys needed by character template."""
+        """Returned dict has all keys needed by codepoint template."""
         desc = u.get_character_page_description('A')
         self.assertEqual(set(desc.keys()), self.REQUIRED_KEYS)
 
@@ -308,22 +308,22 @@ class DecodeViewTestCase(TestCase):
         self.assertNotIn('text', response.context)
 
 
-class CharacterViewTestCase(TestCase):
-    """Character detail view by hex code point slug."""
+class CodepointViewTestCase(TestCase):
+    """Codepoint detail view by hex code point slug."""
     def setUp(self):
         self.client = Client()
 
-    def test_character_valid_slug(self):
-        """Valid hex slug returns 200 and character info."""
+    def test_codepoint_valid_slug(self):
+        """Valid hex slug returns 200 and codepoint info."""
         # U+0041 = 'A'
-        response = self.client.get(reverse('character', kwargs={'slug': '41'}))
+        response = self.client.get(reverse('codepoint', kwargs={'slug': '41'}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['char'], 'A')
         self.assertEqual(response.context['tagline'], 'U+0041')
 
-    def test_character_emoji_slug(self):
-        """Supplementary character slug (e.g. emoji) works."""
-        response = self.client.get(reverse('character', kwargs={'slug': '1F600'}))
+    def test_codepoint_emoji_slug(self):
+        """Supplementary codepoint slug (e.g. emoji) works."""
+        response = self.client.get(reverse('codepoint', kwargs={'slug': '1F600'}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['char'], '😀')
 

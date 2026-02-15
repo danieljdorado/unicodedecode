@@ -199,7 +199,7 @@ def get_east_asian_width(char):
         return ''
 
 def get_character_page_description(char):
-    """Build a dict of character attributes for a detail/character page.
+    """Build a dict of character attributes for a detail/codepoint page.
 
     Args:
         char: Single Unicode character.

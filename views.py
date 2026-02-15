@@ -1,6 +1,6 @@
 """Unicode decode app views.
 
-Handles rendering of the about, character, decode, privacy, terms, and tofu
+Handles rendering of the about, codepoint, decode, privacy, terms, and tofu
 pages, and processes Unicode text decoding form submissions.
 """
 
@@ -19,19 +19,19 @@ def about(request):
                                          'tagline' : 'Get To Know Us'})
 
 
-def character(request, slug):
-    """Render the character detail page for a Unicode code point.
+def codepoint(request, slug):
+    """Render the codepoint detail page for a Unicode code point.
 
     Args:
         request: The HTTP request.
         slug: Hex string of the Unicode code point (e.g. '0041' for 'A').
 
     Returns:
-        HttpResponse: Rendered character.html with character description context.
+        HttpResponse: Rendered codepoint.html with codepoint description context.
     """
     char = chr(int(slug, 16))
     char_desc = u.get_character_page_description(char)
-    return render(request, 'decode/character.html', char_desc)
+    return render(request, 'decode/codepoint.html', char_desc)
 
 
 def privacy(request):

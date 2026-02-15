@@ -28,7 +28,7 @@
         {% for x in text %}
             <tr>
                 <td>{{x.char}}</td>
-                <td><a href="{% url 'character' slug=x.hex %}" class="green-text text-darken-2">{{x.name}}</a></td>
+                <td><a href="{% url 'codepoint' slug=x.hex %}" class="green-text text-darken-2">{{x.name}}</a></td>
                 <td>{{x.category}}</td>
                 <td>{{x.digit}}</td>
                 <td>{{x.bidi}}</td>
