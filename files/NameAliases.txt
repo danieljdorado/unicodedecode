@@ -1,10 +1,11 @@
-# NameAliases-12.1.0.txt
-# Date: 2019-03-08, 23:59:00 GMT [KW, LI]
-# © 2019 Unicode®, Inc.
-# For terms of use, see http://www.unicode.org/terms_of_use.html
+# NameAliases-17.0.0.txt
+# Date: 2025-04-23
+# © 2025 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
 #
 # Unicode Character Database
-# For documentation, see http://www.unicode.org/reports/tr44/
+# For documentation, see https://www.unicode.org/reports/tr44/
 #
 # This file is a normative contributory data file in the
 # Unicode Character Database.
@@ -40,7 +41,7 @@
 # control codes (which for historical reasons have no Unicode character name)
 # or for format characters.
 #
-# For documentation, see NamesList.html and http://www.unicode.org/reports/tr44/
+# For documentation, see NamesList.html and https://www.unicode.org/reports/tr44/
 #
 # FORMAT
 #
@@ -135,6 +136,7 @@
 0018;CAN;abbreviation
 0019;END OF MEDIUM;control
 0019;EOM;abbreviation
+0019;EM;abbreviation
 001A;SUBSTITUTE;control
 001A;SUB;abbreviation
 001B;ESCAPE;control
@@ -163,7 +165,7 @@
 # (and corresponding abbreviations) for these code
 # points are included here because these names leaked
 # out from the draft documents and were published in
-# at least one RFC whose names for code points was
+# at least one RFC whose names for code points were
 # implemented in Perl regex expressions.
 
 0080;PADDING CHARACTER;figment
@@ -254,6 +256,7 @@
 01A2;LATIN CAPITAL LETTER GHA;correction
 01A3;LATIN SMALL LETTER GHA;correction
 034F;CGJ;abbreviation
+0616;ARABIC SMALL HIGH LIGATURE ALEF WITH YEH BARREE;correction
 061C;ALM;abbreviation
 0709;SYRIAC SUBLINEAR COLON SKEWED LEFT;correction
 0CDE;KANNADA LETTER LLLA;correction
@@ -270,6 +273,8 @@
 180C;FVS2;abbreviation
 180D;FVS3;abbreviation
 180E;MVS;abbreviation
+180F;FVS4;abbreviation
+1BBD;SUNDANESE LETTER ARCHAIC I;correction
 200B;ZWSP;abbreviation
 200C;ZWNJ;abbreviation
 200D;ZWJ;abbreviation
@@ -293,6 +298,7 @@
 2B7A;LEFTWARDS TRIANGLE-HEADED ARROW WITH DOUBLE VERTICAL STROKE;correction
 2B7C;RIGHTWARDS TRIANGLE-HEADED ARROW WITH DOUBLE VERTICAL STROKE;correction
 A015;YI SYLLABLE ITERATION MARK;correction
+AA6E;MYANMAR LETTER KHAMTI LLA;correction
 FE00;VS1;abbreviation
 FE01;VS2;abbreviation
 FE02;VS3;abbreviation
@@ -315,12 +321,20 @@ FEFF;BOM;abbreviation
 FEFF;ZWNBSP;abbreviation
 122D4;CUNEIFORM SIGN NU11 TENU;correction
 122D5;CUNEIFORM SIGN NU11 OVER NU11 BUR OVER BUR;correction
+12327;CUNEIFORM SIGN KALAM;correction
+1680B;BAMUM LETTER PHASE-A MAEMGBIEE;correction
+16881;BAMUM LETTER PHASE-B PUNGGAAM;correction
+1688E;BAMUM LETTER PHASE-B NGGOM;correction
+168DC;BAMUM LETTER PHASE-C SHETFON;correction
+1697D;BAMUM LETTER PHASE-E NGGOP;correction
 16E56;MEDEFAIDRIN CAPITAL LETTER H;correction
 16E57;MEDEFAIDRIN CAPITAL LETTER NG;correction
 16E76;MEDEFAIDRIN SMALL LETTER H;correction
 16E77;MEDEFAIDRIN SMALL LETTER NG;correction
 1B001;HENTAIGANA LETTER E-1;correction
 1D0C5;BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS;correction
+1E899;MENDE KIKAKUI SYLLABLE M172 MBO;correction
+1E89A;MENDE KIKAKUI SYLLABLE M174 MBOO;correction
 E0100;VS17;abbreviation
 E0101;VS18;abbreviation
 E0102;VS19;abbreviation
