@@ -15,58 +15,66 @@
 
 
 
-      <table class="responsive-table highlight">
-        <thead>
-          <tr>
-            <th>Character</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Digit</th>
-            <th>Bi-Directional</th>
-            <th>Integer</th>
-            <th>Code Point</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>𐓇</td>
-            <td><a href="{% url 'codepoint' slug='104c7' %}" class="green-text text-darken-2">OSAGE CAPITAL LETTER SHA</a></td>
-            <td>UPPERCASE LETTER</td>
-            <td></td>
-            <td>LEFT-TO-RIGHT</td>
-            <td>66759</td>
-            <td>U+0x104c7</td>
-          </tr>
-          <tr>
-            <td>ൠ</td>
-            <td><a href="{% url 'codepoint' slug='d60' %}" class="green-text text-darken-2">MALAYALAM LETTER VOCALIC RR</a></td>
-            <td>OTHER LETTER</td>
-            <td></td>
-            <td>LEFT-TO-RIGHT</td>
-            <td>3424</td>
-            <td>U+0xd60</td>
-          </tr>
-        </tbody>
-      </table>
-      <br>
-      <div class="row">
-        <div class="col s12"><b>Normalization Form:</b></div>
-        <div class="col s2"></div>    
-                <div class="col s2">
-                    <span>NFC:</span>
-                    <span style="color: green;">True</span>
-                </div>
-                <div class="col s2">
-                    <span>NFKC:</span>
-                    <span style="color: green;">True</span>
-                </div>
-                <div class="col s2">
-                    <span>NFD:</span>
-                    <span style="color: green;">True</span>
-                </div>
-                <div class="col s2">
-                    <span>NFKD:</span>
-                    <span style="color: green;">True</span>
-                </div>
+    <div class="section">
+        <h5 class="header col s12 green-text text-darken-2">Code Point Details</h5>
+        <table class="responsive-table highlight codepoint-details-table">
+            <thead>
+              <tr>
+                <th>Character</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Digit</th>
+                <th>Direction</th>
+                <th>Integer</th>
+                <th>Code Point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Character">𐓇</td>
+                <td data-label="Name"><a href="{% url 'codepoint' slug='104c7' %}" class="green-text text-darken-2">OSAGE CAPITAL LETTER SHA</a></td>
+                <td data-label="Category">UPPERCASE LETTER</td>
+                <td data-label="Digit"></td>
+                <td data-label="Direction">LEFT-TO-RIGHT</td>
+                <td data-label="Integer">66759</td>
+                <td data-label="Code Point">U+0x104c7</td>
+              </tr>
+              <tr>
+                <td data-label="Character">ൠ</td>
+                <td data-label="Name"><a href="{% url 'codepoint' slug='d60' %}" class="green-text text-darken-2">MALAYALAM LETTER VOCALIC RR</a></td>
+                <td data-label="Category">OTHER LETTER</td>
+                <td data-label="Digit"></td>
+                <td data-label="Direction">LEFT-TO-RIGHT</td>
+                <td data-label="Integer">3424</td>
+                <td data-label="Code Point">U+0xd60</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h5 class="header col s12 center green-text text-darken-2">Normalization form</h5>
+        <div class="row">
+            <div class="col s12 center">
+                <table class="responsive-table highlight normalization-table">
+                    <thead>
+                      <tr>
+                        <th>NFC</th>
+                        <th>NFKC</th>
+                        <th>NFD</th>
+                        <th>NFKD</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td data-label="NFC"><span class="green-text text-darken-2">True</span></td>
+                        <td data-label="NFKC"><span class="green-text text-darken-2">True</span></td>
+                        <td data-label="NFD"><span class="green-text text-darken-2">True</span></td>
+                        <td data-label="NFKD"><span class="green-text text-darken-2">True</span></td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+    </div>
 {% endblock %}
