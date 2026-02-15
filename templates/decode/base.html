@@ -27,10 +27,7 @@
         <h5 class="header col s12 light">{{ tagline }}</h5>
       </div>
       <div class="row center">
-        <form action="{% url 'decode' %}" method="post">
-        <div class="row center">
-          {% block content %} {% endblock %}
-        </div>
+        {% block content %}{% endblock %}
       </div>
       <br><br>
 

@@ -12,52 +12,52 @@
   <a href="javascript:history.back()" class='green-text text-darken-2'>Go Back</a>
 </div>
 <br>
-<h5 class="header center green-text text-darken-2">Character Data</h5>
+<h5 class="header center green-text text-darken-2">Codepoint Details</h5>
 <table class="highlight">
   <thead>
     <tr>
       <th>Name:</th>
-      <td>{{ name }}</td>
+      <td>{{ name|default:"N/A" }}</td>
     </tr>
     <tr>
-      <th>Character:</th>
+      <th>Codepoint:</th>
       <td>{{ char }}</td>
     </tr>
     <tr>
       <th>Category:</th>
-      <td>{{ category }}</td>
+      <td>{{ category|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>Digit:</th>
-      <td>{{ digit }}</td>
+      <td>{{ digit|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>Direction:</th>
-      <td>{{ direction }}</td>
+      <td>{{ direction|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>Decomposition:</th>
-      <td>{{ decomposition }}</td>
+      <td>{{ decomposition|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>Integer:</th>
-      <td>{{ integer }}</td>
+      <td>{{ integer|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>Lower:</th>
-      <td>{{ lower }}</td>
+      <td>{{ lower|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>Upper:</th>
-      <td>{{ upper }}</td>
+      <td>{{ upper|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>Aliases:</th>
-      <td>{{ aliases }}</td>
+      <td>{{ aliases|default:"N/A" }}</td>
     </tr>
     <tr>
       <th>East Asian Width:</th>
-      <td>{{ east_asian }}</td>
+      <td>{{ east_asian|default:"N/A" }}</td>
     </tr>
   </thead>
 </table>

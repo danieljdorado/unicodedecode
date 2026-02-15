@@ -7,56 +7,69 @@
         {% csrf_token %}
         {{ form }}
         <p>
-            <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Decode</button>
+            <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Examine</button>
         </p>
         </form>
     </div>
 
-    <table class="responsive-table highlight">
-        <thead>
-          <tr>
-            <th>Character</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Digit</th>
-            <th>Direction</th>
-            <th>Integer</th>
-            <th>Code Point</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for x in text %}
-            <tr>
-                <td>{{x.char}}</td>
-                <td><a href="{% url 'character' slug=x.hex %}" class="green-text text-darken-2">{{x.name}}</a></td>
-                <td>{{x.category}}</td>
-                <td>{{x.digit}}</td>
-                <td>{{x.bidi}}</td>
-                <td>{{x.ord}}</td>
-                <td>{{x.code_point}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-<br>
-    <div class="row">
-        <div class="col s12"><b>Normalization Form:</b></div>
-        <div class="col s2"></div>
+    <div class="section">
+        <h5 class="header col s12 green-text text-darken-2">Character Details</h5>
+        <table class="responsive-table highlight codepoint-details-table">
+            <thead>
+              <tr>
+                <th>Character</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Digit</th>
+                <th>Direction</th>
+                <th>Integer</th>
+                <th>Code Point</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for x in text %}
+                <tr>
+                    <td data-label="Character">{{ x.char|default:"N/A" }}</td>
+                    <td data-label="Name"><a href="{% url 'codepoint' slug=x.hex %}" class="green-text text-darken-2">{{ x.name|default:"N/A" }}</a></td>
+                    <td data-label="Category">{{ x.category|default:"N/A" }}</td>
+                    <td data-label="Digit">{{ x.digit|default:"N/A" }}</td>
+                    <td data-label="Direction">{{ x.bidi|default:"N/A" }}</td>
+                    <td data-label="Integer">{{ x.ord|default:"N/A" }}</td>
+                    <td data-label="Code Point">{{ x.code_point|default:"N/A" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-        {% for key, item in normalization_form.items %}
-            {% if item == True %}
-                <div class="col s2">
-                    <span>{{ key }}:</span>
-                    <span style="color: green;">{{ item }}</span>
-                </div>
-
-                {% else  %}
-                <div class="col s2">
-                    <span>{{ key }}:</span>
-                    <span style="color: red;">{{ item }}</span>
-                </div>
-                {% endif %}
-        {% endfor %}
+    <div class="section">
+        <h5 class="header col s12 center green-text text-darken-2">Normalization Form</h5>
+        <div class="row">
+            <div class="col s12 center">
+                <table class="responsive-table highlight normalization-table">
+            <thead>
+              <tr>
+                {% for key in normalization_form.keys %}
+                <th>{{ key }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {% for key, item in normalization_form.items %}
+                <td data-label="{{ key }}">
+                    {% if item == True %}
+                        <span class="green-text text-darken-2">{{ item }}</span>
+                    {% else %}
+                        <span class="red-text text-darken-2">{{ item }}</span>
+                    {% endif %}
+                </td>
+                {% endfor %}
+              </tr>
+            </tbody>
+        </table>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

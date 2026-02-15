@@ -24,14 +24,14 @@
       <br><br>
       <h1 class="header center green-text text-darken-2">Unicode Decode</h1>
       <div class="row center">
-        <h5 class="header col s12 light">Decode a Unicode String</h5>
+        <h5 class="header col s12 light">See every character behind your text <i>instantly</i><h5>
       </div>
       <div class="row center">
         <form action="{% url 'decode' %}" method="post">
           {% csrf_token %}
           {{ form }}
           <p>
-              <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Decode</button>
+              <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Examine</button>
           </p>
       </form>
       <div class="row center">
@@ -51,27 +51,27 @@
         <div class="col s12 m4">
           <div class="icon-block">
             <h2 class="center green-text text-darken-2"><i class="material-icons">code</i></h2>
-            <h5 class="center">Speeds up development</h5>
+            <h5 class="center">Speed Up Development</h5>
 
-            <p class="light">Quickly explore any character in a unicode string. Type in a single character, a word, or even paste an entire paragraph.  Unicode Search will you give a character by character breakdown.</p>
+            <p class="light">Paste any text, a character, a word, or a full paragraph, and get an instant, character-by-character breakdown. Unicode Decode shows you exactly what’s in your string so you can debug faster and ship with confidence.</p>
           </div>
         </div>
 
         <div class="col s12 m4">
           <div class="icon-block">
             <h2 class="center green-text text-darken-2"><i class="material-icons">language</i></h2>
-            <h5 class="center">Languages</h5>
+            <h5 class="center">Every Language, Every Script</h5>
 
-            <p class="light">Easily uncover which characters are being used in every language supported by unicode. No more being fooled by tricky look-a-likes!</p>
+            <p class="light">Unicode supports thousands of languages and scripts. See which characters you’re actually using,and spot lookalikes and homoglyphs before they cause bugs or security issues.</p>
           </div>
         </div>
 
         <div class="col s12 m4">
           <div class="icon-block">
             <h2 class="center green-text text-darken-2"><i class="material-icons">settings</i></h2>
-            <h5 class="center">Normalization Form</h5>
+            <h5 class="center">Normalization at a Glance</h5>
 
-            <p class="light">NFC? NFD?  Know if your string is normalized and to which normalization forms: NFC, NFD NFKC and NFKD. </p>
+            <p class="light">NFC, NFD, NFKC, NFKD? No guesswork. Unicode Decode tells you whether your string is normalized and which form it uses, so you can fix encoding issues before they reach production.</p>
           </div>
         </div>
       </div>
