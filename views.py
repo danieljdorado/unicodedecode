@@ -1,8 +1,8 @@
 """Views."""
 
 from django.shortcuts import render
-from decode.forms import UnicodeTextForm
-import decode.unicode_util as u
+from unicodedecode.forms import UnicodeTextForm
+import unicodedecode.unicode_util as u
 
 
 def about(request):

@@ -3,7 +3,7 @@
 
 from django.test import TestCase
 import unicodedata as ud
-import decode.unicode_util as u
+import unicodedecode.unicode_util as u
 
 
 class UnicodeVersionTestCase(TestCase):
