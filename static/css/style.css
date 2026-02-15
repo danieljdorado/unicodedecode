@@ -41,3 +41,68 @@ main {
 .about-logo {
   max-width: 320px;
 }
+
+/* Normalization table: centered on desktop, long-view stack on small screens */
+.normalization-table {
+  max-width: 20em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Override Materialize responsive-table on mobile: stacked card layout so data is visible and only one set of headers */
+@media screen and (max-width: 600px) {
+  .normalization-table,
+  .codepoint-details-table {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .normalization-table thead,
+  .normalization-table thead tr,
+  .normalization-table thead th,
+  .codepoint-details-table thead,
+  .codepoint-details-table thead tr,
+  .codepoint-details-table thead th {
+    display: none !important;
+    float: none !important;
+  }
+
+  .normalization-table tbody,
+  .codepoint-details-table tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .normalization-table tbody tr,
+  .codepoint-details-table tbody tr {
+    display: block !important;
+    inline-size: 100% !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0.5em 0;
+    margin-bottom: 0.5em;
+  }
+
+  .normalization-table td,
+  .codepoint-details-table td {
+    display: block !important;
+    text-align: left;
+    padding: 0.25em 0;
+    min-height: auto !important;
+    border: none !important;
+  }
+
+  .normalization-table td::before,
+  .codepoint-details-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    min-width: 6em;
+  }
+
+  .normalization-table td::after,
+  .codepoint-details-table td::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
