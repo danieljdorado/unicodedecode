@@ -119,27 +119,3 @@ class TestUnicodeDigits(TestCase):
         for char, digit in self.digits.items():
             self.assertEqual(u.get_digit(char), digit)
 
-
-# class TestUnicodeCategory(TestCase):
-#     def setUp(self):
-#         """Test examples."""
-
-#         self.categories = {}
-
-
-#     def test_category(self):
-#         """Get category test."""
-#         for char, category in self.categories.items():
-#             self.assertEqual(u.get_category(char), category)
-
-# class TestUnicodeDirection(TestCase):
-#     def setUp(self):
-#         """Test examples."""
-
-#         self.directions = {}
-
-
-#     def test_direction(self):
-#         """Get direction test."""
-#         for char, direction in self.directions.items():
-#             self.assertEqual(u.get_direction(char), direction)
