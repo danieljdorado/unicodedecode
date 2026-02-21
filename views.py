@@ -4,6 +4,7 @@ Handles rendering of the about, codepoint, decode, privacy, terms, and tofu
 pages, and processes Unicode text decoding form submissions.
 """
 
+from dataclasses import asdict
 from django.shortcuts import render
 from decode.forms import UnicodeTextForm
 import decode.unicode_util as u
@@ -31,7 +32,7 @@ def codepoint(request, slug):
     """
     char = chr(int(slug, 16))
     char_desc = u.get_character_page_description(char)
-    return render(request, 'decode/codepoint.html', char_desc)
+    return render(request, 'decode/codepoint.html', asdict(char_desc))
 
 
 def privacy(request):

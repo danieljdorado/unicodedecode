@@ -1,5 +1,6 @@
 """Backend tests for decode app."""
 
+import dataclasses
 from django.test import TestCase, Client
 from django.urls import reverse
 import unicodedata2 as ud
@@ -401,23 +402,25 @@ class TestGetCharacterPageDescription(TestCase):
         'aliases', 'east_asian',
     }
 
-    def test_returns_all_keys(self):
-        """Returned dict has all keys needed by codepoint template."""
+    def test_returns_codepoint_description(self):
+        """Returned value is CodepointDescription with all fields needed by template."""
         desc = u.get_character_page_description('A')
-        self.assertEqual(set(desc.keys()), self.REQUIRED_KEYS)
+        self.assertIsInstance(desc, u.CodepointDescription)
+        field_names = {f.name for f in dataclasses.fields(desc)}
+        self.assertEqual(field_names, self.REQUIRED_KEYS)
 
     def test_values_sensible(self):
         """Values are correct types and consistent."""
         desc = u.get_character_page_description('a')
-        self.assertEqual(desc['char'], 'a')
-        self.assertEqual(desc['name'], 'LATIN SMALL LETTER A')
-        self.assertEqual(desc['tagline'], 'U+0061')
-        self.assertEqual(desc['integer'], 97)
-        self.assertEqual(desc['upper'], 'A')
-        self.assertEqual(desc['lower'], 'a')
-        self.assertIsInstance(desc['decomposition'], str)
-        self.assertIsInstance(desc['aliases'], str)
-        self.assertTrue(desc['east_asian'] is None or isinstance(desc['east_asian'], str))
+        self.assertEqual(desc.char, 'a')
+        self.assertEqual(desc.name, 'LATIN SMALL LETTER A')
+        self.assertEqual(desc.tagline, 'U+0061')
+        self.assertEqual(desc.integer, 97)
+        self.assertEqual(desc.upper, 'A')
+        self.assertEqual(desc.lower, 'a')
+        self.assertIsInstance(desc.decomposition, str)
+        self.assertIsInstance(desc.aliases, str)
+        self.assertTrue(desc.east_asian is None or isinstance(desc.east_asian, str))
 
 
 class DecodeViewTestCase(TestCase):

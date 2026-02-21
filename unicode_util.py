@@ -232,29 +232,46 @@ def get_east_asian_width(char: str) -> Optional[str]:
     except (ValueError, TypeError):
         return None
 
-def get_character_page_description(char: str) -> Dict[str, Any]:
-    """Build a dict of character attributes for a detail/codepoint page.
+@dataclass
+class CodepointDescription:
+    """Character attributes for the codepoint detail page."""
+
+    title: str
+    tagline: str
+    char: str
+    name: str
+    category: str
+    digit: Optional[int]
+    direction: Optional[str]
+    integer: int
+    upper: str
+    lower: str
+    decomposition: str
+    aliases: str
+    east_asian: Optional[str]
+
+
+def get_character_page_description(char: str) -> CodepointDescription:
+    """Build character attributes for a detail/codepoint page.
 
     Args:
         char: Single Unicode character.
 
     Returns:
-        Dict with 'title', 'tagline', 'char', 'name', 'category', 'digit',
-        'direction', 'integer', 'upper', 'lower', 'decomposition', 'aliases',
-        and 'east_asian'.
+        CodepointDescription with all fields for the codepoint template.
     """
-    return {
-        'title' : get_name(char),
-        'tagline' : get_code_point(char),
-        'char' : char,
-        'name' : get_name(char),
-        'category' : get_category(char),
-        'digit': get_digit(char),
-        'direction': get_direction(char),
-        'integer': ord(char),
-        'upper': char.upper(),
-        'lower' : char.lower(),
-        'decomposition': ud.decomposition(char),
-        'aliases': ', '.join(alias.get_aliases(char)),
-        'east_asian': get_east_asian_width(char),
-    }
+    return CodepointDescription(
+        title=get_name(char),
+        tagline=get_code_point(char),
+        char=char,
+        name=get_name(char),
+        category=get_category(char),
+        digit=get_digit(char),
+        direction=get_direction(char),
+        integer=ord(char),
+        upper=char.upper(),
+        lower=char.lower(),
+        decomposition=ud.decomposition(char),
+        aliases=', '.join(alias.get_aliases(char)),
+        east_asian=get_east_asian_width(char),
+    )
