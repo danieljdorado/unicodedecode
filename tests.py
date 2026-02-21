@@ -264,19 +264,19 @@ class TestUnicodeDigits(TestCase):
     def setUp(self):
         self.digits = {
             '1': 1,      # U+0031 DIGIT ONE
-            '⑩': '',     # U+2469 CIRCLED NUMBER TEN (digit may be 10 or not defined)
+            '⑩': None,  # U+2469 CIRCLED NUMBER TEN (digit may be 10 or not defined)
             '۵': 5,      # U+06F5 EXTENDED ARABIC-INDIC DIGIT FIVE
             '६': 6,      # U+096C DEVANAGARI DIGIT SIX
             '੧': 1,      # U+0A67 GURMUKHI DIGIT ONE
-            '🔟': '',    # U+1F51F KEYCAP TEN
+            '🔟': None,  # U+1F51F KEYCAP TEN
             '૫': 5,      # U+0AEB GUJARATI DIGIT FIVE
-            'Ⅶ': '',     # U+2166 ROMAN NUMERAL SEVEN
+            'Ⅶ': None,  # U+2166 ROMAN NUMERAL SEVEN
             '¹': 1,      # U+00B9 SUPERSCRIPT ONE
-            'H': '',     # U+0048 LATIN CAPITAL LETTER H
+            'H': None,   # U+0048 LATIN CAPITAL LETTER H
         }
 
     def test_digit(self):
-        """get_digit returns numeric value or empty string."""
+        """get_digit returns numeric value or None for non-digit."""
         for char, expected in self.digits.items():
             with self.subTest(char=repr(char), expected=expected):
                 self.assertEqual(u.get_digit(char), expected)
@@ -317,22 +317,30 @@ class TestGetDirection(TestCase):
     def test_rtl(self):
         self.assertEqual(u.get_direction('א'), 'RIGHT-TO-LEFT (NON-ARABIC)')
 
-    def test_returns_string(self):
-        """get_direction always returns a string (possibly empty)."""
+    def test_returns_string_or_none(self):
+        """get_direction returns str or None."""
         self.assertIsInstance(u.get_direction('A'), str)
-        self.assertIsInstance(u.get_direction(' '), str)
+        result = u.get_direction(' ')
+        self.assertTrue(result is None or isinstance(result, str))
 
 
 class TestGetEastAsianWidth(TestCase):
     """East Asian width category."""
-    def test_returns_string(self):
-        self.assertIsInstance(u.get_east_asian_width('A'), str)
-        self.assertIsInstance(u.get_east_asian_width('　'), str)
+    def test_returns_string_or_none(self):
+        """get_east_asian_width returns str or None."""
+        result = u.get_east_asian_width('A')
+        self.assertTrue(result is None or isinstance(result, str))
+        result = u.get_east_asian_width('　')
+        self.assertTrue(result is None or isinstance(result, str))
 
     def test_known_categories(self):
         """Common characters have a non-empty width label."""
-        self.assertTrue(len(u.get_east_asian_width('A')) > 0)
-        self.assertTrue(len(u.get_east_asian_width('あ')) > 0)
+        result_a = u.get_east_asian_width('A')
+        self.assertIsNotNone(result_a)
+        self.assertGreater(len(result_a), 0)
+        result_ja = u.get_east_asian_width('あ')
+        self.assertIsNotNone(result_ja)
+        self.assertGreater(len(result_ja), 0)
 
 
 class TestExamenUnicode(TestCase):
@@ -409,7 +417,7 @@ class TestGetCharacterPageDescription(TestCase):
         self.assertEqual(desc['lower'], 'a')
         self.assertIsInstance(desc['decomposition'], str)
         self.assertIsInstance(desc['aliases'], str)
-        self.assertIsInstance(desc['east_asian'], str)
+        self.assertTrue(desc['east_asian'] is None or isinstance(desc['east_asian'], str))
 
 
 class DecodeViewTestCase(TestCase):

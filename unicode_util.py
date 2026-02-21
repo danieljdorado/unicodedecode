@@ -8,7 +8,7 @@ import os
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import unicodedata2 as ud
 from decode.mappings import bidi, category, east_asian_categories
@@ -33,8 +33,8 @@ class CharacterInfo:
     char: str
     name: str
     category: str
-    digit: Union[int, str]
-    bidi: str
+    digit: Optional[int]
+    bidi: Optional[str]
     ordinal: int
     code_point: str
     hex_code: str
@@ -186,37 +186,37 @@ def get_category(char: str) -> str:
         return ''
 
 
-def get_digit(char: str) -> Union[int, str]:
+def get_digit(char: str) -> Optional[int]:
     """Return the digit value for numeric characters.
 
     Args:
         char: Single Unicode character.
 
     Returns:
-        Digit value (e.g. 0-9 for decimal digits), or '' if not a digit.
+        Digit value (e.g. 0-9 for decimal digits), or None if not a digit.
     """
     try:
-        return ud.digit(char, '')
+        return ud.digit(char)
     except (ValueError, TypeError):
-        return ''
+        return None
 
 
-def get_direction(char: str) -> str:
+def get_direction(char: str) -> Optional[str]:
     """Return the character's bidirectional class label.
 
     Args:
         char: Single Unicode character.
 
     Returns:
-        Bidi class string (e.g. 'LEFT-TO-RIGHT'), or '' if not in our mapping.
+        Bidi class string (e.g. 'LEFT-TO-RIGHT'), or None if not in our mapping.
     """
     try:
         return bidi[ud.bidirectional(char)]
     except KeyError:
-        return ''
+        return None
 
 
-def get_east_asian_width(char: str) -> str:
+def get_east_asian_width(char: str) -> Optional[str]:
     """Return the East Asian width category for the character.
 
     Args:
@@ -224,13 +224,13 @@ def get_east_asian_width(char: str) -> str:
 
     Returns:
         Width label (e.g. 'East Asian Fullwidth') or raw property value,
-        or '' on invalid input.
+        or None on invalid input.
     """
     try:
         width: str = ud.east_asian_width(char)
         return east_asian_categories.get(width, width)
     except (ValueError, TypeError):
-        return ''
+        return None
 
 def get_character_page_description(char: str) -> Dict[str, Any]:
     """Build a dict of character attributes for a detail/codepoint page.
