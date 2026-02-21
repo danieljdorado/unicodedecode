@@ -6,75 +6,95 @@ bidirectional class, East Asian width, and aliases from the Unicode database.
 
 import os
 import re
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Union
+
 import unicodedata2 as ud
 from decode.mappings import bidi, category, east_asian_categories
 
 # App package directory (decode/)
-_APP_DIR = os.path.dirname(os.path.abspath(__file__))
+_APP_DIR: str = os.path.dirname(os.path.abspath(__file__))
 
-def examen_unicode(text):
-    """Build a list of per-character attribute dicts for the given text.
+
+class NormalizationForm(str, Enum):
+    """Unicode normalization form."""
+
+    NFC = 'NFC'
+    NFKC = 'NFKC'
+    NFD = 'NFD'
+    NFKD = 'NFKD'
+
+
+@dataclass
+class CharacterInfo:
+    """Per-character Unicode attributes from examen_unicode."""
+
+    char: str
+    name: str
+    category: str
+    digit: Union[int, str]
+    bidi: str
+    ord: int  # noqa: A001
+    code_point: str
+    hex: str  # noqa: A001
+
+
+def examen_unicode(text: str) -> list[CharacterInfo]:
+    """Build a list of per-character attribute objects for the given text.
 
     Args:
         text: String of Unicode characters to inspect.
 
     Returns:
-        List of dicts, one per character, with keys such as 'char', 'name',
-        'category', 'digit', 'bidi', 'ord', 'code_point', and 'hex'.
+        List of CharacterInfo, one per character.
     """
-    char_list = []
-    for char in text:
-        char_dict = {
-            'char' : char,
-            'name' : get_name(char),
-            'category' : get_category(char),
-            'digit' : get_digit(char),
-            'bidi' : get_direction(char),
-            'ord' : ord(char),
-            'code_point' : get_code_point(char),
-            'hex' : get_code_point(char, False),
-        }
-
-        char_list.append(char_dict)
-    return char_list
+    return [
+        CharacterInfo(
+            char=char,
+            name=get_name(char),
+            category=get_category(char),
+            digit=get_digit(char),
+            bidi=get_direction(char),
+            ord=ord(char),
+            code_point=get_code_point(char),
+            hex=get_code_point(char, False),
+        )
+        for char in text
+    ]
 
 
 
-def is_normalized(form, s):
+def is_normalized(form: NormalizationForm, s: str) -> bool:
     """Return whether the string is already in the given normalization form.
 
     Args:
-        form: Unicode normalization form name ('NFC', 'NFKC', 'NFD', or 'NFKD').
+        form: Unicode normalization form (NFC, NFKC, NFD, or NFKD).
         s: Unicode string to check.
 
     Returns:
         True if s is normalized in that form, False otherwise.
     """
-    return s == ud.normalize(form, s)
+    return s == ud.normalize(form.value, s)
 
 
-def get_normalization_form(string):
+def get_normalization_form(string: str) -> dict[NormalizationForm, bool]:
     """Report which Unicode normalization forms the string is already in.
 
     Args:
         string: Unicode string to check.
 
     Returns:
-        Dict mapping form name ('NFC', 'NFKC', 'NFD', 'NFKD') to True if
-        the string is normalized in that form, else False.
+        Dict mapping each normalization form to True if the string is
+        normalized in that form, else False.
     """
-    forms = ['NFC', 'NFKC', 'NFD', 'NFKD']
-    normalization_form = {}
-
-    for form in forms:
-        if is_normalized(form, string):
-            normalization_form[form] = True
-        else:
-            normalization_form[form] = False
+    normalization_form: dict[NormalizationForm, bool] = {}
+    for form in NormalizationForm:
+        normalization_form[form] = is_normalized(form, string)
     return normalization_form
 
 
-def get_code_point(char, prefix=True):
+def get_code_point(char: str, prefix: bool = True) -> str:
     """Format the character's code point as hex.
 
     Args:
@@ -92,31 +112,27 @@ def get_code_point(char, prefix=True):
 class Alias:
     """Look up formal name aliases for Unicode characters from NameAliases.txt."""
 
-    def __init__(self):
+    raw: str
+
+    def __init__(self) -> None:
         """Load NameAliases.txt from the package files directory."""
         with open(os.path.join(_APP_DIR, 'files', 'NameAliases.txt'), encoding='utf-8') as f:
             self.raw = f.read()
 
-
-    def get_aliases(self, char, format=False):
+    def get_aliases(self, char: str) -> list[str]:
         """Return formal name aliases for the character.
 
         Args:
             char: Single Unicode character.
-            format: If True, return a single comma-separated string; else list.
 
         Returns:
-            List of alias strings, or comma-separated string if format is True.
+            List of alias strings.
         """
-        code_point = get_code_point(char, False)
-        pattern = f'{code_point};([A-Z ]+);'
-        aliases = re.findall(pattern, self.raw, re.IGNORECASE)
+        code_point: str = get_code_point(char, False)
+        pattern: str = f'{code_point};([A-Z ]+);'
+        return re.findall(pattern, self.raw, re.IGNORECASE)
 
-        if format:
-            return ', '.join(aliases)
-        return aliases
-
-    def get_alias(self, char):
+    def get_alias(self, char: str) -> str:
         """Return the first formal name alias for the character, or 'UNKNOWN'.
 
         Args:
@@ -125,17 +141,17 @@ class Alias:
         Returns:
             First alias string, or 'UNKNOWN' if none are found.
         """
-        aliases = self.get_aliases(char)
+        aliases: list[str] = self.get_aliases(char)
 
         if aliases:
             return aliases[0]
         return "UNKNOWN"
 
 
-alias = Alias()
+alias: Alias = Alias()
 
 
-def get_name(char):
+def get_name(char: str) -> str:
     """Return the Unicode character name, or first alias if no name is defined.
 
     Args:
@@ -145,12 +161,12 @@ def get_name(char):
         Official name or first alias string.
     """
     try:
-        name = ud.name(char)
+        name: str = ud.name(char)
     except ValueError:
         name = alias.get_alias(char)
     return name
 
-def get_category(char):
+def get_category(char: str) -> str:
     """Return a human-readable character general category.
 
     Args:
@@ -165,7 +181,7 @@ def get_category(char):
         return ''
 
 
-def get_digit(char):
+def get_digit(char: str) -> Union[int, str]:
     """Return the digit value for numeric characters.
 
     Args:
@@ -180,7 +196,7 @@ def get_digit(char):
         return ''
 
 
-def get_direction(char):
+def get_direction(char: str) -> str:
     """Return the character's bidirectional class label.
 
     Args:
@@ -195,7 +211,7 @@ def get_direction(char):
         return ''
 
 
-def get_east_asian_width(char):
+def get_east_asian_width(char: str) -> str:
     """Return the East Asian width category for the character.
 
     Args:
@@ -206,12 +222,12 @@ def get_east_asian_width(char):
         or '' on invalid input.
     """
     try:
-        width = ud.east_asian_width(char)
+        width: str = ud.east_asian_width(char)
         return east_asian_categories.get(width, width)
     except (ValueError, TypeError):
         return ''
 
-def get_character_page_description(char):
+def get_character_page_description(char: str) -> dict[str, Any]:
     """Build a dict of character attributes for a detail/codepoint page.
 
     Args:
@@ -234,6 +250,6 @@ def get_character_page_description(char):
         'upper': char.upper(),
         'lower' : char.lower(),
         'decomposition': ud.decomposition(char),
-        'aliases': alias.get_aliases(char, True),
+        'aliases': ', '.join(alias.get_aliases(char)),
         'east_asian': get_east_asian_width(char),
     }

@@ -76,7 +76,7 @@ class TestIsNormalized(TestCase):
 
     def test_empty_string_all_forms(self):
         """Empty string is normalized in every form."""
-        for form in ('NFC', 'NFKC', 'NFD', 'NFKD'):
+        for form in u.NormalizationForm:
             with self.subTest(form=form):
                 self.assertTrue(u.is_normalized(form, ''))
 
@@ -84,53 +84,53 @@ class TestIsNormalized(TestCase):
         """ASCII letters and digits are typically normalized in all forms."""
         for s in ('a', 'Z', '0', '9', 'Hello', ' \t\n'):
             with self.subTest(s=repr(s)):
-                for form in ('NFC', 'NFKC', 'NFD', 'NFKD'):
+                for form in u.NormalizationForm:
                     self.assertTrue(u.is_normalized(form, s), f'{form} {repr(s)}')
 
     def test_nfc_precomposed_is_nfc(self):
         """Precomposed characters (single codepoint) are NFC."""
         # é = U+00E9 (single precomposed char)
-        self.assertTrue(u.is_normalized('NFC', 'é'))
-        self.assertTrue(u.is_normalized('NFC', 'ñ'))
-        self.assertTrue(u.is_normalized('NFC', 'ü'))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFC, 'é'))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFC, 'ñ'))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFC, 'ü'))
 
     def test_nfc_decomposed_is_not_nfc(self):
         """Decomposed sequence (base + combining) is not NFC."""
         # e + U+0301 COMBINING ACUTE
         decomposed_e_acute = 'e\u0301'
-        self.assertFalse(u.is_normalized('NFC', decomposed_e_acute))
+        self.assertFalse(u.is_normalized(u.NormalizationForm.NFC, decomposed_e_acute))
         self.assertEqual(ud.normalize('NFC', decomposed_e_acute), 'é')
 
     def test_nfd_decomposed_is_nfd(self):
         """Decomposed sequence is NFD."""
         decomposed_e_acute = 'e\u0301'
-        self.assertTrue(u.is_normalized('NFD', decomposed_e_acute))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFD, decomposed_e_acute))
 
     def test_nfd_precomposed_is_not_nfd(self):
         """Precomposed character is not NFD (decomposed form has multiple codepoints)."""
-        self.assertFalse(u.is_normalized('NFD', 'é'))
+        self.assertFalse(u.is_normalized(u.NormalizationForm.NFD, 'é'))
         self.assertEqual(ud.normalize('NFD', 'é'), 'e\u0301')
 
     def test_nfkc_compatibility_composite(self):
         """Compatibility composite (e.g. ﬁ) is NFC but not NFKC."""
         # U+FB01 LATIN SMALL LIGATURE FI
         fi_ligature = '\uFB01'
-        self.assertTrue(u.is_normalized('NFC', fi_ligature))
-        self.assertFalse(u.is_normalized('NFKC', fi_ligature))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFC, fi_ligature))
+        self.assertFalse(u.is_normalized(u.NormalizationForm.NFKC, fi_ligature))
         self.assertEqual(ud.normalize('NFKC', fi_ligature), 'fi')
 
     def test_nfkc_after_normalize_is_normalized(self):
         """String normalized to NFKC is is_normalized('NFKC', ...) True."""
         fi_ligature = '\uFB01'
         nfkc = ud.normalize('NFKC', fi_ligature)
-        self.assertTrue(u.is_normalized('NFKC', nfkc))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFKC, nfkc))
 
     def test_nfkd_decomposed_compatibility(self):
         """NFKD decomposes compatibility characters."""
         fi_ligature = '\uFB01'
-        self.assertFalse(u.is_normalized('NFKD', fi_ligature))
+        self.assertFalse(u.is_normalized(u.NormalizationForm.NFKD, fi_ligature))
         nfkd = ud.normalize('NFKD', fi_ligature)
-        self.assertTrue(u.is_normalized('NFKD', nfkd))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFKD, nfkd))
 
     def test_is_normalized_equals_normalize_equality(self):
         """is_normalized(form, s) matches (s == ud.normalize(form, s))."""
@@ -147,25 +147,25 @@ class TestIsNormalized(TestCase):
             '2\u2075',   # 2⁵
         ]
         for s in cases:
-            for form in ('NFC', 'NFKC', 'NFD', 'NFKD'):
+            for form in u.NormalizationForm:
                 with self.subTest(form=form, s=repr(s)):
-                    expected = (s == ud.normalize(form, s))
+                    expected = (s == ud.normalize(form.value, s))
                     self.assertIs(u.is_normalized(form, s), expected)
 
     def test_each_form_independently(self):
         """Each form gives correct True/False for known strings."""
         # (string, form, expected)
         cases = [
-            ('é', 'NFC', True),
-            ('é', 'NFD', False),
-            ('e\u0301', 'NFC', False),
-            ('e\u0301', 'NFD', True),
-            ('\uFB01', 'NFC', True),
-            ('\uFB01', 'NFKC', False),
-            ('fi', 'NFKC', True),
-            ('ẛ\u0323', 'NFC', True),
-            ('ẛ\u0323', 'NFD', False),
-            ('ẛ\u0323', 'NFKD', False),
+            ('é', u.NormalizationForm.NFC, True),
+            ('é', u.NormalizationForm.NFD, False),
+            ('e\u0301', u.NormalizationForm.NFC, False),
+            ('e\u0301', u.NormalizationForm.NFD, True),
+            ('\uFB01', u.NormalizationForm.NFC, True),
+            ('\uFB01', u.NormalizationForm.NFKC, False),
+            ('fi', u.NormalizationForm.NFKC, True),
+            ('ẛ\u0323', u.NormalizationForm.NFC, True),
+            ('ẛ\u0323', u.NormalizationForm.NFD, False),
+            ('ẛ\u0323', u.NormalizationForm.NFKD, False),
         ]
         for s, form, expected in cases:
             with self.subTest(form=form, s=repr(s), expected=expected):
@@ -173,37 +173,38 @@ class TestIsNormalized(TestCase):
 
     def test_return_type_bool(self):
         """is_normalized returns bool."""
-        self.assertIsInstance(u.is_normalized('NFC', ''), bool)
-        self.assertIsInstance(u.is_normalized('NFC', 'x'), bool)
-        self.assertIsInstance(u.is_normalized('NFD', 'é'), bool)
+        self.assertIsInstance(u.is_normalized(u.NormalizationForm.NFC, ''), bool)
+        self.assertIsInstance(u.is_normalized(u.NormalizationForm.NFC, 'x'), bool)
+        self.assertIsInstance(u.is_normalized(u.NormalizationForm.NFD, 'é'), bool)
 
     def test_multiple_combining_marks(self):
         """Multiple combining marks: NFD string is normalized in NFD only when canonical."""
         # a + acute + diaeresis (canonical order)
         a_acute_diaeresis = 'a\u0301\u0308'
         nfd = ud.normalize('NFD', a_acute_diaeresis)
-        self.assertTrue(u.is_normalized('NFD', nfd))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFD, nfd))
         # If we had wrong order, might not be NFD
-        self.assertTrue(u.is_normalized('NFD', ud.normalize('NFD', 'ä\u0301')))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFD, ud.normalize('NFD', 'ä\u0301')))
 
     def test_emoji_supplementary_plane(self):
         """Supplementary plane (e.g. emoji) can be NFC/NFD."""
         emoji = '😀'
-        self.assertTrue(u.is_normalized('NFC', emoji))
-        self.assertTrue(u.is_normalized('NFD', emoji))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFC, emoji))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFD, emoji))
         nfd_emoji = ud.normalize('NFD', emoji)
-        self.assertTrue(u.is_normalized('NFD', nfd_emoji))
+        self.assertTrue(u.is_normalized(u.NormalizationForm.NFD, nfd_emoji))
 
 
 class TestNormalization(TestCase):
     """Normalization form detection."""
     def setUp(self):
+        NF = u.NormalizationForm
         self.forms = {
-            'a': {'NFC': True, 'NFKC': True, 'NFD': True, 'NFKD': True},
-            'é': {'NFC': True, 'NFKC': True, 'NFD': False, 'NFKD': False},
-            'é': {'NFC': False, 'NFKC': False, 'NFD': True, 'NFKD': True},  # e + combining acute
-            'ﬁ': {'NFC': True, 'NFKC': False, 'NFD': True, 'NFKD': False},
-            'ẛ̣': {'NFC': True, 'NFKC': False, 'NFD': False, 'NFKD': False},
+            'a': {NF.NFC: True, NF.NFKC: True, NF.NFD: True, NF.NFKD: True},
+            'é': {NF.NFC: True, NF.NFKC: True, NF.NFD: False, NF.NFKD: False},
+            'é': {NF.NFC: False, NF.NFKC: False, NF.NFD: True, NF.NFKD: True},  # e + combining acute
+            'ﬁ': {NF.NFC: True, NF.NFKC: False, NF.NFD: True, NF.NFKD: False},
+            'ẛ̣': {NF.NFC: True, NF.NFKC: False, NF.NFD: False, NF.NFKD: False},
         }
 
     def test_normalization_check(self):
@@ -216,7 +217,7 @@ class TestNormalization(TestCase):
     def test_normalization_returns_all_forms(self):
         """get_normalization_form returns exactly NFC, NFKC, NFD, NFKD."""
         result = u.get_normalization_form('a')
-        self.assertEqual(set(result.keys()), {'NFC', 'NFKC', 'NFD', 'NFKD'})
+        self.assertEqual(set(result.keys()), set(u.NormalizationForm))
         for v in result.values():
             self.assertIs(v, True)
 
@@ -324,48 +325,46 @@ class TestGetEastAsianWidth(TestCase):
 
 
 class TestExamenUnicode(TestCase):
-    """examen_unicode builds per-character attribute list."""
-    REQUIRED_KEYS = {'char', 'name', 'category', 'digit', 'bidi', 'ord', 'code_point', 'hex'}
-
+    """examen_unicode builds per-character CharacterInfo list."""
     def test_empty_string(self):
         """Empty string returns empty list."""
         self.assertEqual(u.examen_unicode(''), [])
 
     def test_single_character(self):
-        """Single character returns one dict with all required keys."""
+        """Single character returns one CharacterInfo with all attributes."""
         result = u.examen_unicode('A')
         self.assertEqual(len(result), 1)
-        self.assertEqual(set(result[0].keys()), self.REQUIRED_KEYS)
-        self.assertEqual(result[0]['char'], 'A')
-        self.assertEqual(result[0]['ord'], 65)
-        self.assertEqual(result[0]['code_point'], 'U+0041')
-        self.assertEqual(result[0]['hex'], '0041')
+        self.assertIsInstance(result[0], u.CharacterInfo)
+        self.assertEqual(result[0].char, 'A')
+        self.assertEqual(result[0].ord, 65)
+        self.assertEqual(result[0].code_point, 'U+0041')
+        self.assertEqual(result[0].hex, '0041')
 
     def test_multiple_characters(self):
-        """Multiple characters return one dict per character."""
+        """Multiple characters return one CharacterInfo per character."""
         result = u.examen_unicode('Hi')
         self.assertEqual(len(result), 2)
-        self.assertEqual(result[0]['char'], 'H')
-        self.assertEqual(result[1]['char'], 'i')
+        self.assertEqual(result[0].char, 'H')
+        self.assertEqual(result[1].char, 'i')
 
     def test_unicode_string(self):
         """Non-ASCII and emoji are handled."""
         result = u.examen_unicode('😀')
         self.assertEqual(len(result), 1)
-        self.assertEqual(result[0]['char'], '😀')
-        self.assertEqual(result[0]['code_point'], 'U+1F600')
+        self.assertEqual(result[0].char, '😀')
+        self.assertEqual(result[0].code_point, 'U+1F600')
 
 
 class TestAlias(TestCase):
     """Alias lookup from NameAliases.txt."""
-    def test_get_aliases_list(self):
-        """get_aliases with format=False returns a list."""
-        aliases = u.alias.get_aliases('A', format=False)
+    def test_get_aliases_returns_list(self):
+        """get_aliases returns a list of alias strings."""
+        aliases = u.alias.get_aliases('A')
         self.assertIsInstance(aliases, list)
 
-    def test_get_aliases_formatted(self):
-        """get_aliases with format=True returns comma-separated string."""
-        result = u.alias.get_aliases('A', format=True)
+    def test_get_aliases_can_be_joined(self):
+        """Callers can format aliases manually, e.g. ', '.join(get_aliases(char))."""
+        result = ', '.join(u.alias.get_aliases('A'))
         self.assertIsInstance(result, str)
 
     def test_get_alias_returns_string(self):
