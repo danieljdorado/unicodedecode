@@ -90,7 +90,7 @@ def get_normalization_form(string: str) -> Dict[NormalizationForm, bool]:
     """
     normalization_form: Dict[NormalizationForm, bool] = {}
     for form in NormalizationForm:
-        normalization_form[form.name] = is_normalized(form, string)
+        normalization_form[form] = is_normalized(form, string)
     return normalization_form
 
 
@@ -170,6 +170,7 @@ def get_name(char: str) -> str:
     except ValueError:
         name = alias.get_alias(char)
     return name
+
 
 def get_category(char: str) -> Optional[str]:
     """Return a human-readable character general category.
