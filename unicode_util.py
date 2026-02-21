@@ -20,10 +20,10 @@ _APP_DIR: str = os.path.dirname(os.path.abspath(__file__))
 class NormalizationForm(str, Enum):
     """Unicode normalization form."""
 
-    NFC = 'NFC'
-    NFKC = 'NFKC'
-    NFD = 'NFD'
-    NFKD = 'NFKD'
+    NFC = 'NFC'  # Canonical Composition
+    NFKC = 'NFKC'  # Compatibility Composition
+    NFD = 'NFD'  # Canonical Decomposition
+    NFKD = 'NFKD'  # Compatibility Decomposition
 
 
 @dataclass
