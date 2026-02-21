@@ -336,9 +336,9 @@ class TestExamenUnicode(TestCase):
         self.assertEqual(len(result), 1)
         self.assertIsInstance(result[0], u.CharacterInfo)
         self.assertEqual(result[0].char, 'A')
-        self.assertEqual(result[0].ord, 65)
+        self.assertEqual(result[0].ordinal, 65)
         self.assertEqual(result[0].code_point, 'U+0041')
-        self.assertEqual(result[0].hex, '0041')
+        self.assertEqual(result[0].hex_code, '0041')
 
     def test_multiple_characters(self):
         """Multiple characters return one CharacterInfo per character."""

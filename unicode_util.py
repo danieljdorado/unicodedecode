@@ -35,9 +35,9 @@ class CharacterInfo:
     category: str
     digit: Union[int, str]
     bidi: str
-    ord: int  # noqa: A001
+    ordinal: int
     code_point: str
-    hex: str  # noqa: A001
+    hex_code: str
 
 
 def examen_unicode(text: str) -> List[CharacterInfo]:
@@ -56,9 +56,9 @@ def examen_unicode(text: str) -> List[CharacterInfo]:
             category=get_category(char),
             digit=get_digit(char),
             bidi=get_direction(char),
-            ord=ord(char),
+            ordinal=ord(char),
             code_point=get_code_point(char),
-            hex=get_code_point(char, False),
+            hex_code=get_code_point(char, False),
         )
         for char in text
     ]
