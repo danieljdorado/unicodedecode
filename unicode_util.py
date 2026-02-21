@@ -8,7 +8,7 @@ import os
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Union
+from typing import Any, Dict, List, Union
 
 import unicodedata2 as ud
 from decode.mappings import bidi, category, east_asian_categories
@@ -40,7 +40,7 @@ class CharacterInfo:
     hex: str  # noqa: A001
 
 
-def examen_unicode(text: str) -> list[CharacterInfo]:
+def examen_unicode(text: str) -> List[CharacterInfo]:
     """Build a list of per-character attribute objects for the given text.
 
     Args:
@@ -78,7 +78,7 @@ def is_normalized(form: NormalizationForm, s: str) -> bool:
     return s == ud.normalize(form.value, s)
 
 
-def get_normalization_form(string: str) -> dict[NormalizationForm, bool]:
+def get_normalization_form(string: str) -> Dict[NormalizationForm, bool]:
     """Report which Unicode normalization forms the string is already in.
 
     Args:
@@ -88,9 +88,9 @@ def get_normalization_form(string: str) -> dict[NormalizationForm, bool]:
         Dict mapping each normalization form to True if the string is
         normalized in that form, else False.
     """
-    normalization_form: dict[NormalizationForm, bool] = {}
+    normalization_form: Dict[NormalizationForm, bool] = {}
     for form in NormalizationForm:
-        normalization_form[form] = is_normalized(form, string)
+        normalization_form[form.name] = is_normalized(form, string)
     return normalization_form
 
 
@@ -119,7 +119,7 @@ class Alias:
         with open(os.path.join(_APP_DIR, 'files', 'NameAliases.txt'), encoding='utf-8') as f:
             self.raw = f.read()
 
-    def get_aliases(self, char: str) -> list[str]:
+    def get_aliases(self, char: str) -> List[str]:
         """Return formal name aliases for the character.
 
         Args:
@@ -141,7 +141,7 @@ class Alias:
         Returns:
             First alias string, or 'UNKNOWN' if none are found.
         """
-        aliases: list[str] = self.get_aliases(char)
+        aliases: List[str] = self.get_aliases(char)
 
         if aliases:
             return aliases[0]
@@ -227,7 +227,7 @@ def get_east_asian_width(char: str) -> str:
     except (ValueError, TypeError):
         return ''
 
-def get_character_page_description(char: str) -> dict[str, Any]:
+def get_character_page_description(char: str) -> Dict[str, Any]:
     """Build a dict of character attributes for a detail/codepoint page.
 
     Args:
