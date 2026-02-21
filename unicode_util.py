@@ -32,7 +32,7 @@ class CharacterInfo:
 
     char: str
     name: str
-    category: str
+    category: Optional[str]
     digit: Optional[int]
     bidi: Optional[str]
     ordinal: int
@@ -171,19 +171,19 @@ def get_name(char: str) -> str:
         name = alias.get_alias(char)
     return name
 
-def get_category(char: str) -> str:
+def get_category(char: str) -> Optional[str]:
     """Return a human-readable character general category.
 
     Args:
         char: Single Unicode character.
 
     Returns:
-        Category label string (e.g. 'UPPERCASE LETTER'), or '' if unknown.
+        Category label string (e.g. 'UPPERCASE LETTER'), or None if unknown.
     """
     try:
         return category[ud.category(char)]
     except KeyError:
-        return ''
+        return None
 
 
 def get_digit(char: str) -> Optional[int]:
@@ -240,7 +240,7 @@ class CodepointDescription:
     tagline: str
     char: str
     name: str
-    category: str
+    category: Optional[str]
     digit: Optional[int]
     direction: Optional[str]
     integer: int
