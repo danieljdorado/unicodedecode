@@ -98,12 +98,17 @@ def get_code_point(char: str, prefix: bool = True) -> str:
     """Format the character's code point as hex.
 
     Args:
-        char: Single Unicode character.
+        char: Single Unicode character (must be length 1).
         prefix: If True, include 'U+' prefix (e.g. 'U+0061'); else bare hex.
 
     Returns:
         Code point as string, e.g. 'U+0061' or '0061'.
+
+    Raises:
+        ValueError: If char is not exactly one character.
     """
+    if len(char) != 1:
+        raise ValueError(f"get_code_point expects a single character, got length {len(char)}")
     if prefix:
         return f'U+{ord(char):04X}'
     return f'{ord(char):04X}'

@@ -70,6 +70,17 @@ class TestCodePoints(TestCase):
         self.assertEqual(u.get_code_point('😀', prefix=False), '1F600')
         self.assertEqual(u.get_code_point('😀', prefix=True), 'U+1F600')
 
+    def test_get_code_point_requires_single_character(self):
+        """get_code_point raises ValueError for empty or multi-character input."""
+        with self.assertRaises(ValueError) as cm:
+            u.get_code_point('')
+        self.assertIn('single character', str(cm.exception))
+        self.assertIn('length 0', str(cm.exception))
+        with self.assertRaises(ValueError) as cm:
+            u.get_code_point('ab')
+        self.assertIn('single character', str(cm.exception))
+        self.assertIn('length 2', str(cm.exception))
+
 
 class TestIsNormalized(TestCase):
     """Unit tests for is_normalized(form, s)."""
