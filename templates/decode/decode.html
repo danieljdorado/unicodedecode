@@ -109,6 +109,18 @@
   var copyTableBtn = document.getElementById('copy-table-button');
   var table = document.getElementById('codepoint-details-table');
   if (!copyTableBtn || !table) return;
+  function escapeHtml(s) {
+    var div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+  function cellText(cell) {
+    var a = cell.querySelector('a');
+    if (a && a.href) {
+      return '<a href="' + escapeHtml(a.href) + '">' + escapeHtml((a.textContent || '').trim()) + '</a>';
+    }
+    return escapeHtml((cell.textContent || '').trim());
+  }
   function tableToTsv(el) {
     var rows = [];
     var headerRow = el.querySelector('thead tr');
@@ -120,10 +132,34 @@
     });
     return rows.join('\n');
   }
+  function tableToHtml(el) {
+    var html = '<meta charset="UTF-8"><table><thead><tr>';
+    var headerRow = el.querySelector('thead tr');
+    if (headerRow) {
+      headerRow.querySelectorAll('th').forEach(function(th) {
+        html += '<th>' + escapeHtml((th.textContent || '').trim()) + '</th>';
+      });
+    }
+    html += '</tr></thead><tbody>';
+    el.querySelectorAll('tbody tr').forEach(function(tr) {
+      html += '<tr>';
+      tr.querySelectorAll('td').forEach(function(td) {
+        html += '<td>' + cellText(td) + '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    return html;
+  }
   copyTableBtn.addEventListener('click', function() {
     var tsv = tableToTsv(table);
+    var html = tableToHtml(table);
     if (!tsv) return;
-    navigator.clipboard.writeText(tsv).then(function() {
+    var item = new ClipboardItem({
+      'text/plain': new Blob([tsv], { type: 'text/plain' }),
+      'text/html': new Blob([html], { type: 'text/html' })
+    });
+    navigator.clipboard.write([item]).then(function() {
       if (typeof M !== 'undefined' && M.toast) {
         M.toast({ html: 'Table copied to clipboard', displayLength: 2000 });
       }
