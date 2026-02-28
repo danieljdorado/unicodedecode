@@ -32,6 +32,7 @@
                 <th>Direction</th>
                 <th>Integer</th>
                 <th>Code Point</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -44,6 +45,11 @@
                     <td data-label="Direction">{{ x.bidi|default:"N/A" }}</td>
                     <td data-label="Integer">{{ x.ordinal|default:"N/A" }}</td>
                     <td data-label="Code Point">{{ x.code_point|default:"N/A" }}</td>
+                    <td data-label="Action">
+                        <button type="button" class="btn-flat green-text text-darken-2 copy-char-btn" data-char="{{ x.char }}" title="Copy character" aria-label="Copy character">
+                            <i class="material-icons">content_copy</i>
+                        </button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -82,7 +88,14 @@
 
     {% load static %}
     <script src="{% static 'js/decode-clipboard.js' %}"></script>
+    <script src="{% static 'js/decode-copy-char.js' %}"></script>
     <script>
+// Per-row copy: clicking the copy icon in the Action column copies that row's character.
+(function() {
+  var table = document.getElementById('codepoint-details-table');
+  if (window.decodeCopyChar) window.decodeCopyChar.attachCopyCharHandler(table);
+})();
+
 // Share button: copies the decode page URL (with ?s=... for the current text) to the clipboard.
 (function() {
   var shareBtn = document.getElementById('share-button');
