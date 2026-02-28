@@ -81,6 +81,7 @@
     </div>
 
     <script>
+// Share button: copies the decode page URL (with ?s=... for the current text) to the clipboard.
 (function() {
   var shareBtn = document.getElementById('share-button');
   var textarea = document.getElementById('textarea1');
@@ -105,15 +106,21 @@
   });
 })();
 
+// Copy table button: copies the Character Details table to the clipboard as both
+// plain text (TSV) and HTML so that pasting into Excel/Sheets keeps links in the Name column.
 (function() {
   var copyTableBtn = document.getElementById('copy-table-button');
   var table = document.getElementById('codepoint-details-table');
   if (!copyTableBtn || !table) return;
+
+  /** Escapes HTML special characters in a string (e.g. for use inside tags). */
   function escapeHtml(s) {
     var div = document.createElement('div');
     div.textContent = s;
     return div.innerHTML;
   }
+
+  /** Returns HTML for a table cell: preserves <a href="..."> in the Name column, else escaped text. */
   function cellText(cell) {
     var a = cell.querySelector('a');
     if (a && a.href) {
@@ -121,6 +128,8 @@
     }
     return escapeHtml((cell.textContent || '').trim());
   }
+
+  /** Serializes the table as tab-separated values (one row per line) for plain-text paste. */
   function tableToTsv(el) {
     var rows = [];
     var headerRow = el.querySelector('thead tr');
@@ -132,6 +141,8 @@
     });
     return rows.join('\n');
   }
+
+  /** Serializes the table as HTML with links preserved so Excel/Sheets keep hyperlinks. */
   function tableToHtml(el) {
     var html = '<meta charset="UTF-8"><table><thead><tr>';
     var headerRow = el.querySelector('thead tr');
@@ -151,6 +162,7 @@
     html += '</tbody></table>';
     return html;
   }
+
   copyTableBtn.addEventListener('click', function() {
     var tsv = tableToTsv(table);
     var html = tableToHtml(table);
