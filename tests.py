@@ -1,6 +1,21 @@
 """Backend tests for decode app."""
 
 import dataclasses
+import sys
+from copy import copy
+
+# Python 3.14+: fix Django BaseContext.__copy__ (see Django #35844).
+# Remove when upgrading to Django 4.2.16+ or 5.x.
+if sys.version_info >= (3, 14):
+    from django.template.context import BaseContext
+    def _base_context_copy_py314(self):
+        duplicate = BaseContext()
+        duplicate.__class__ = self.__class__
+        duplicate.__dict__ = copy(self.__dict__)
+        duplicate.dicts = self.dicts[:]
+        return duplicate
+    BaseContext.__copy__ = _base_context_copy_py314
+
 from django.test import TestCase, Client
 from django.urls import reverse
 import unicodedata2 as ud
