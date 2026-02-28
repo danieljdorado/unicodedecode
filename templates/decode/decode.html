@@ -27,11 +27,14 @@
               <tr>
                 <th>Character</th>
                 <th>Name</th>
+                <th>Script</th>
                 <th>Category</th>
                 <th>Digit</th>
                 <th>Direction</th>
                 <th>Integer</th>
                 <th>Code Point</th>
+                <th>UTF-8</th>
+                <th>HTML</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -40,11 +43,14 @@
                 <tr>
                     <td data-label="Character">{{ x.char|default:"N/A" }}</td>
                     <td data-label="Name"><a href="{% url 'codepoint' slug=x.hex_code %}" class="green-text text-darken-2">{{ x.name|default:"N/A" }}</a></td>
+                    <td data-label="Script">{{ x.script|default:"N/A" }}</td>
                     <td data-label="Category">{{ x.category|default:"N/A" }}</td>
                     <td data-label="Digit">{{ x.digit|default:"N/A" }}</td>
                     <td data-label="Direction">{{ x.bidi|default:"N/A" }}</td>
                     <td data-label="Integer">{{ x.ordinal|default:"N/A" }}</td>
                     <td data-label="Code Point">{{ x.code_point|default:"N/A" }}</td>
+                    <td data-label="UTF-8">{{ x.utf8_bytes|default:"N/A" }}</td>
+                    <td data-label="HTML">{{ x.html_entity|default:"N/A" }}</td>
                     <td data-label="Action">
                         <button type="button" class="btn-flat green-text text-darken-2 copy-char-btn" data-char="{{ x.char }}" title="Copy character" aria-label="Copy character">
                             <i class="material-icons">content_copy</i>

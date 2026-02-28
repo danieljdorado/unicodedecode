@@ -11,7 +11,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 import unicodedata2 as ud
-from decode.mappings import bidi, category, east_asian_categories
+from decode.mappings import bidi, category, east_asian_categories, name_prefix_to_script, script_display
 
 # App package directory (decode/)
 _APP_DIR: str = os.path.dirname(os.path.abspath(__file__))
@@ -38,6 +38,70 @@ class CharacterInfo:
     ordinal: int
     code_point: str
     hex_code: str
+    utf8_bytes: str
+    html_entity: str
+    script: Optional[str]
+
+
+def get_script(char: str) -> Optional[str]:
+    """Return the Unicode script (e.g. Latin, Cyrillic, Arabic) for homoglyph detection.
+
+    Uses ud.script() when available (e.g. unicodedata2), otherwise infers from
+    the character name (e.g. "LATIN CAPITAL LETTER A" -> "Latin").
+
+    Args:
+        char: Single Unicode character.
+
+    Returns:
+        Script display name (e.g. 'Latin', 'Cyrillic', 'Common'), or None.
+    """
+    if len(char) != 1:
+        return None
+    script_getter = getattr(ud, 'script', None)
+    if script_getter is not None:
+        try:
+            code = script_getter(char)
+            return script_display.get(code, code) if code else None
+        except (ValueError, TypeError):
+            pass
+    try:
+        name = ud.name(char)
+    except ValueError:
+        return None
+    if not name:
+        return None
+    first = name.split()[0] if name else ''
+    return name_prefix_to_script.get(first, 'Common')
+
+
+def get_html_entity(char: str) -> str:
+    """Return the decimal HTML numeric character reference (e.g. '&#107;' for 'k').
+
+    Args:
+        char: Single Unicode character.
+
+    Returns:
+        String of the form '&#decimal;'.
+    """
+    if len(char) != 1:
+        raise ValueError(f"get_html_entity expects a single character, got length {len(char)}")
+    return f'&#{ord(char)};'
+
+
+def get_utf8_bytes(char: str) -> str:
+    """Return the UTF-8 byte representation of the character as hex (e.g. '0x6B' for 'k').
+
+    Multi-byte sequences are space-separated (e.g. '0xF0 0x9F 0x98 0x80' for '😀').
+
+    Args:
+        char: Single Unicode character.
+
+    Returns:
+        Hex string of the form '0xXX' or '0xXX 0xYY ...'.
+    """
+    if len(char) != 1:
+        raise ValueError(f"get_utf8_bytes expects a single character, got length {len(char)}")
+    return ' '.join(f'0x{b:02X}' for b in char.encode('utf-8'))
 
 
 def examen_unicode(text: str) -> List[CharacterInfo]:
@@ -59,6 +123,9 @@ def examen_unicode(text: str) -> List[CharacterInfo]:
             ordinal=ord(char),
             code_point=get_code_point(char),
             hex_code=get_code_point(char, False),
+            utf8_bytes=get_utf8_bytes(char),
+            html_entity=get_html_entity(char),
+            script=get_script(char),
         )
         for char in text
     ]
