@@ -7,7 +7,10 @@
         {% csrf_token %}
         {{ form }}
         <p>
-            <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Examine</button>
+            <button id="decode-button" class="btn-large waves-effect waves-light green darken-2" type="submit">Examine</button>
+            <button id="share-button" class="btn-large waves-effect waves-light green darken-2" type="button" title="Copy link to clipboard">
+                <i class="material-icons left">share</i>Share
+            </button>
         </p>
         </form>
     </div>
@@ -71,5 +74,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+(function() {
+  var shareBtn = document.getElementById('share-button');
+  var textarea = document.getElementById('textarea1');
+  if (!shareBtn || !textarea) return;
+  shareBtn.addEventListener('click', function() {
+    var text = textarea.value.trim();
+    var url = text
+      ? window.location.origin + window.location.pathname + '?s=' + encodeURIComponent(text)
+      : window.location.origin + window.location.pathname;
+    navigator.clipboard.writeText(url).then(function() {
+      if (typeof M !== 'undefined' && M.toast) {
+        M.toast({ html: 'Link copied to clipboard', displayLength: 2000 });
+      } else {
+        shareBtn.textContent = 'Copied!';
+        setTimeout(function() { shareBtn.innerHTML = '<i class="material-icons left">share</i>Share'; }, 1500);
+      }
+    }).catch(function() {
+      if (typeof M !== 'undefined' && M.toast) {
+        M.toast({ html: 'Could not copy link', displayLength: 2000 });
+      }
+    });
+  });
+})();
+    </script>
 
 {% endblock %}
