@@ -16,8 +16,13 @@
     </div>
 
     <div class="section">
-        <h5 class="header col s12 green-text text-darken-2">Character Details</h5>
-        <table class="responsive-table highlight codepoint-details-table">
+        <h5 class="header col s12 green-text text-darken-2">
+            Character Details
+            <button id="copy-table-button" class="btn-flat green-text text-darken-2" type="button" title="Copy table to clipboard" style="vertical-align: middle; padding: 0 8px;">
+                <i class="material-icons">content_copy</i>
+            </button>
+        </h5>
+        <table id="codepoint-details-table" class="responsive-table highlight codepoint-details-table">
             <thead>
               <tr>
                 <th>Character</th>
@@ -95,6 +100,36 @@
     }).catch(function() {
       if (typeof M !== 'undefined' && M.toast) {
         M.toast({ html: 'Could not copy link', displayLength: 2000 });
+      }
+    });
+  });
+})();
+
+(function() {
+  var copyTableBtn = document.getElementById('copy-table-button');
+  var table = document.getElementById('codepoint-details-table');
+  if (!copyTableBtn || !table) return;
+  function tableToTsv(el) {
+    var rows = [];
+    var headerRow = el.querySelector('thead tr');
+    if (headerRow) {
+      rows.push(Array.from(headerRow.querySelectorAll('th')).map(function(c) { return (c.textContent || '').trim(); }).join('\t'));
+    }
+    el.querySelectorAll('tbody tr').forEach(function(tr) {
+      rows.push(Array.from(tr.querySelectorAll('td')).map(function(c) { return (c.textContent || '').trim(); }).join('\t'));
+    });
+    return rows.join('\n');
+  }
+  copyTableBtn.addEventListener('click', function() {
+    var tsv = tableToTsv(table);
+    if (!tsv) return;
+    navigator.clipboard.writeText(tsv).then(function() {
+      if (typeof M !== 'undefined' && M.toast) {
+        M.toast({ html: 'Table copied to clipboard', displayLength: 2000 });
+      }
+    }).catch(function() {
+      if (typeof M !== 'undefined' && M.toast) {
+        M.toast({ html: 'Could not copy table', displayLength: 2000 });
       }
     });
   });
