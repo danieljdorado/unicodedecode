@@ -48,8 +48,7 @@ def privacy(request):
 def decode(request):
     """Handle the decode page: show form on GET, decode Unicode text on POST.
 
-    GET returns the home form, or decode results if the `s` query parameter
-    is present (e.g. /?s=abcd). POST validates the form, normalizes and analyzes
+    GET returns the home form. POST validates the form, normalizes and analyzes
     the submitted text, then renders the decode results.
 
     Returns:
@@ -67,18 +66,6 @@ def decode(request):
                                                    'normalization_form': normalization_form,
                                                    'title' : 'Unicode Decode',
                                                    'tagline' : 'See every character behind your text instantly'})
-
-    # GET with ?s=... : show decode results for that string
-    query_string = request.GET.get('s', '').strip()
-    if query_string:
-        form = UnicodeTextForm(initial={'text': query_string})
-        normalization_form = u.get_normalization_form(query_string)
-        text = u.examen_unicode(query_string)
-        return render(request, 'decode/decode.html', {'form': form,
-                                               'text': text,
-                                               'normalization_form': normalization_form,
-                                               'title': 'Unicode Decode',
-                                               'tagline': 'See every character behind your text instantly'})
 
     form = UnicodeTextForm()
     return render(request, 'decode/home.html', {'form': form})
