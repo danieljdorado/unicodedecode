@@ -68,24 +68,29 @@
 
     <div class="section">
         <h5 class="header col s12 center green-text text-darken-2">Normalization Form</h5>
+        <p class="center grey-text text-darken-1" style="max-width: 36em; margin: 0 auto 1rem auto;">
+            <strong>True</strong> = your text is already in this form (no change if normalized).
+            <strong>False</strong> = normalizing to this form would change the text.
+            Hover over a column header for a short description of each form.
+        </p>
         <div class="row">
             <div class="col s12 center">
                 <table class="responsive-table highlight normalization-table">
             <thead>
               <tr>
-                {% for key in normalization_form.keys %}
-                <th>{{ key.name }}</th>
+                {% for form, value, desc in normalization_form_list %}
+                <th title="{{ desc }}">{{ form.name }}</th>
                 {% endfor %}
               </tr>
             </thead>
             <tbody>
               <tr>
-                {% for key, item in normalization_form.items %}
-                <td data-label="{{ key.name }}">
-                    {% if item == True %}
-                        <span class="green-text text-darken-2">{{ item }}</span>
+                {% for form, value, desc in normalization_form_list %}
+                <td data-label="{{ form.name }}" title="{{ desc }}">
+                    {% if value == True %}
+                        <span class="green-text text-darken-2">{{ value }}</span>
                     {% else %}
-                        <span class="red-text text-darken-2">{{ item }}</span>
+                        <span class="red-text text-darken-2">{{ value }}</span>
                     {% endif %}
                 </td>
                 {% endfor %}

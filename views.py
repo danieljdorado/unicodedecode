@@ -9,6 +9,22 @@ from django.shortcuts import render
 from decode.forms import UnicodeTextForm
 import decode.unicode_util as u
 
+# Short descriptions for normalization form column tooltips.
+NORMALIZATION_DESCRIPTIONS = {
+    u.NormalizationForm.NFC: 'Canonical Composition: precomposed characters where possible (e.g. é as single character).',
+    u.NormalizationForm.NFD: 'Canonical Decomposition: split into base character + combining marks (e.g. e + ´).',
+    u.NormalizationForm.NFKC: 'Compatibility Composition: precomposed + compatibility equivalents (e.g. ﬁ → fi).',
+    u.NormalizationForm.NFKD: 'Compatibility Decomposition: decomposed + compatibility equivalents.',
+}
+
+
+def _normalization_form_with_descriptions(normalization_form):
+    """Return a list of (form, value, description) for the normalization table and tooltips."""
+    return [
+        (form, normalization_form[form], NORMALIZATION_DESCRIPTIONS[form])
+        for form in u.NormalizationForm
+    ]
+
 
 def about(request):
     """Render the About page.
@@ -61,10 +77,12 @@ def decode(request):
         if form.is_valid():
             text = form.cleaned_data['text']
             normalization_form = u.get_normalization_form(text)
+            normalization_form_list = _normalization_form_with_descriptions(normalization_form)
             text = u.examen_unicode(text)
             return render(request, 'decode/decode.html', {'form': form,
                                                    'text': text,
                                                    'normalization_form': normalization_form,
+                                                   'normalization_form_list': normalization_form_list,
                                                    'title' : 'Unicode Decode',
                                                    'tagline' : 'See every character behind your text instantly'})
 
@@ -73,10 +91,12 @@ def decode(request):
     if query_string:
         form = UnicodeTextForm(initial={'text': query_string})
         normalization_form = u.get_normalization_form(query_string)
+        normalization_form_list = _normalization_form_with_descriptions(normalization_form)
         text = u.examen_unicode(query_string)
         return render(request, 'decode/decode.html', {'form': form,
                                                'text': text,
                                                'normalization_form': normalization_form,
+                                               'normalization_form_list': normalization_form_list,
                                                'title': 'Unicode Decode',
                                                'tagline': 'See every character behind your text instantly'})
 
