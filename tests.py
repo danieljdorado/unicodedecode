@@ -187,6 +187,59 @@ class TestGetScript(TestCase):
         self.assertIsNone(u.get_script('ab'))
 
 
+class TestGetHomoglyphRisk(TestCase):
+    """Unit tests for get_homoglyph_risk(char). Flags spoofing/homoglyph attack characters."""
+
+    def test_latin_ascii_no_risk(self):
+        """Latin ASCII letters are not flagged (they are the target of spoofing, not spoofers)."""
+        self.assertIsNone(u.get_homoglyph_risk('a'))
+        self.assertIsNone(u.get_homoglyph_risk('A'))
+        self.assertIsNone(u.get_homoglyph_risk('k'))
+
+    def test_cyrillic_lookalike_flagged(self):
+        """Cyrillic letters that look like Latin are flagged."""
+        self.assertEqual(u.get_homoglyph_risk('\u0430'), 'Yes')   # Cyrillic 'a'
+        self.assertEqual(u.get_homoglyph_risk('\u043E'), 'Yes')   # Cyrillic 'o'
+        self.assertEqual(u.get_homoglyph_risk('\u0440'), 'Yes')   # Cyrillic 'r' (looks like p)
+
+    def test_greek_lookalike_flagged(self):
+        """Greek letters that look like Latin are flagged."""
+        self.assertEqual(u.get_homoglyph_risk('\u03B1'), 'Yes')   # Greek alpha
+        self.assertEqual(u.get_homoglyph_risk('\u03BF'), 'Yes')   # Greek omicron
+
+    def test_fullwidth_flagged(self):
+        """Fullwidth ASCII variants are flagged."""
+        self.assertEqual(u.get_homoglyph_risk('\uFF41'), 'Yes')   # Fullwidth 'a'
+
+    def test_returns_none_for_invalid_input(self):
+        self.assertIsNone(u.get_homoglyph_risk(''))
+        self.assertIsNone(u.get_homoglyph_risk('ab'))
+
+
+class TestGetInvisibleWarning(TestCase):
+    """Unit tests for get_invisible_warning(char). Flags zero-width and invisible characters."""
+
+    def test_visible_characters_return_none(self):
+        self.assertIsNone(u.get_invisible_warning('A'))
+        self.assertIsNone(u.get_invisible_warning(' '))
+
+    def test_zero_width_space_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\u200B'), 'Zero-width space')
+
+    def test_zero_width_joiner_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\u200D'), 'Zero-width joiner')
+
+    def test_bom_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\uFEFF'), 'Zero-width no-break space (BOM)')
+
+    def test_word_joiner_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\u2060'), 'Word joiner')
+
+    def test_returns_none_for_invalid_input(self):
+        self.assertIsNone(u.get_invisible_warning(''))
+        self.assertIsNone(u.get_invisible_warning('ab'))
+
+
 class TestIsNormalized(TestCase):
     """Unit tests for is_normalized(form, s)."""
 
@@ -466,6 +519,8 @@ class TestExamenUnicode(TestCase):
         self.assertEqual(result[0].utf8_bytes, '0x41')
         self.assertEqual(result[0].html_entity, '&#65;')
         self.assertEqual(result[0].script, 'Latin')
+        self.assertIsNone(result[0].homoglyph_risk)
+        self.assertIsNone(result[0].invisible)
 
     def test_multiple_characters(self):
         """Multiple characters return one CharacterInfo per character."""
@@ -491,6 +546,16 @@ class TestExamenUnicode(TestCase):
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0].script, 'Latin')
         self.assertEqual(result[1].script, 'Cyrillic')
+
+    def test_homoglyph_risk_flagged_in_table(self):
+        """Cyrillic lookalike has homoglyph_risk set for Spoofing column."""
+        result = u.examen_unicode('\u0430')  # Cyrillic 'a'
+        self.assertEqual(result[0].homoglyph_risk, 'Yes')
+
+    def test_invisible_flagged_in_table(self):
+        """Zero-width character has invisible set for Invisible column."""
+        result = u.examen_unicode('\u200B')  # Zero-width space
+        self.assertEqual(result[0].invisible, 'Zero-width space')
 
 
 class TestAlias(TestCase):

@@ -11,7 +11,15 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 import unicodedata2 as ud
-from decode.mappings import bidi, category, east_asian_categories, name_prefix_to_script, script_display
+from decode.mappings import (
+    bidi,
+    category,
+    east_asian_categories,
+    name_prefix_to_script,
+    script_display,
+    is_homoglyph_codepoint,
+    INVISIBLE_CHARACTERS,
+)
 
 # App package directory (decode/)
 _APP_DIR: str = os.path.dirname(os.path.abspath(__file__))
@@ -41,6 +49,22 @@ class CharacterInfo:
     utf8_bytes: str
     html_entity: str
     script: Optional[str]
+    homoglyph_risk: Optional[str]
+    invisible: Optional[str]
+
+
+def get_homoglyph_risk(char: str) -> Optional[str]:
+    """Return 'Yes' if the character is commonly used in spoofing/homoglyph attacks, else None."""
+    if len(char) != 1:
+        return None
+    return 'Yes' if is_homoglyph_codepoint(ord(char)) else None
+
+
+def get_invisible_warning(char: str) -> Optional[str]:
+    """Return a short label for invisible/zero-width characters, else None."""
+    if len(char) != 1:
+        return None
+    return INVISIBLE_CHARACTERS.get(ord(char))
 
 
 def get_script(char: str) -> Optional[str]:
@@ -126,6 +150,8 @@ def examen_unicode(text: str) -> List[CharacterInfo]:
             utf8_bytes=get_utf8_bytes(char),
             html_entity=get_html_entity(char),
             script=get_script(char),
+            homoglyph_risk=get_homoglyph_risk(char),
+            invisible=get_invisible_warning(char),
         )
         for char in text
     ]
