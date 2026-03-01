@@ -6,6 +6,7 @@
         <form action="{% url 'decode' %}" method="post">
         {% csrf_token %}
         {{ form }}
+        <p class="grey-text text-darken-1" style="margin-top: 0; margin-bottom: 1rem;">Paste any text, emoji, or special characters.</p>
         <p>
             <button id="decode-button" class="btn-large waves-effect waves-light green darken-2" type="submit">Examine</button>
             <button id="share-button" class="btn-large waves-effect waves-light green darken-2" type="button" title="Copy link to clipboard">
