@@ -39,11 +39,8 @@
                 <th>Character</th>
                 <th>Name</th>
                 <th>Script</th>
-                <th>Spoofing</th>
                 <th>Invisible</th>
                 <th>Category</th>
-                <th>Digit</th>
-                <th>Direction</th>
                 <th>Integer</th>
                 <th>Code Point</th>
                 <th>UTF-8</th>
@@ -57,11 +54,8 @@
                     <td data-label="Character">{{ x.char|default:"N/A" }}</td>
                     <td data-label="Name"><a href="{% url 'codepoint' slug=x.hex_code %}" class="green-text text-darken-2">{{ x.name|default:"N/A" }}</a></td>
                     <td data-label="Script">{{ x.script|default:"N/A" }}</td>
-                    <td data-label="Spoofing">{% if x.homoglyph_risk %}<span class="orange-text text-darken-2" title="Often used in homoglyph/spoofing attacks">⚠</span>{% else %}—{% endif %}</td>
                     <td data-label="Invisible">{% if x.invisible %}<span class="red-text text-darken-2" title="{{ x.invisible }}">⚠</span>{% else %}—{% endif %}</td>
                     <td data-label="Category">{{ x.category|default:"N/A" }}</td>
-                    <td data-label="Digit">{{ x.digit|default:"N/A" }}</td>
-                    <td data-label="Direction">{{ x.bidi|default:"N/A" }}</td>
                     <td data-label="Integer">{{ x.ordinal|default:"N/A" }}</td>
                     <td data-label="Code Point">{{ x.code_point|default:"N/A" }}</td>
                     <td data-label="UTF-8">{{ x.utf8_bytes|default:"N/A" }}</td>
