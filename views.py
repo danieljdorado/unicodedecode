@@ -4,9 +4,11 @@ Handles rendering of the about, codepoint, decode, privacy, terms, and tofu
 pages, and processes Unicode text decoding form submissions.
 """
 
+from collections import Counter
 from dataclasses import asdict
 from django.shortcuts import render
 from decode.forms import UnicodeTextForm
+from decode.mappings import INVISIBLE_CHARACTERS
 import decode.unicode_util as u
 
 # Short descriptions for normalization form column tooltips.
@@ -24,6 +26,34 @@ def _normalization_form_with_descriptions(normalization_form):
         (form, normalization_form[form], NORMALIZATION_DESCRIPTIONS[form])
         for form in u.NormalizationForm
     ]
+
+
+def _text_summary(text):
+    """Build summary dict from decoded text (list of CharacterInfo): num_chars, num_bytes, top3."""
+    if not text:
+        return {
+            'num_chars': 0,
+            'num_bytes': 0,
+            'top3': [],
+        }
+    num_chars = len(text)
+    num_bytes = sum(len(info.char.encode('utf-8')) for info in text)
+    counts = Counter(info.char for info in text)
+    top3 = []
+    for c, n in counts.most_common(3):
+        code_point = u.get_code_point(c)
+        if c == ' ':
+            display = 'space'
+        elif ord(c) in INVISIBLE_CHARACTERS:
+            display = INVISIBLE_CHARACTERS[ord(c)]
+        else:
+            display = c
+        top3.append({'char': c, 'count': n, 'code_point': code_point, 'display': display})
+    return {
+        'num_chars': num_chars,
+        'num_bytes': num_bytes,
+        'top3': top3,
+    }
 
 
 def about(request):
@@ -79,8 +109,10 @@ def decode(request):
             normalization_form = u.get_normalization_form(text)
             normalization_form_list = _normalization_form_with_descriptions(normalization_form)
             text = u.examen_unicode(text)
+            summary = _text_summary(text)
             return render(request, 'decode/decode.html', {'form': form,
                                                    'text': text,
+                                                   'summary': summary,
                                                    'normalization_form': normalization_form,
                                                    'normalization_form_list': normalization_form_list,
                                                    'title' : 'Unicode Decode',
@@ -93,8 +125,10 @@ def decode(request):
         normalization_form = u.get_normalization_form(query_string)
         normalization_form_list = _normalization_form_with_descriptions(normalization_form)
         text = u.examen_unicode(query_string)
+        summary = _text_summary(text)
         return render(request, 'decode/decode.html', {'form': form,
                                                'text': text,
+                                               'summary': summary,
                                                'normalization_form': normalization_form,
                                                'normalization_form_list': normalization_form_list,
                                                'title': 'Unicode Decode',

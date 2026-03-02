@@ -17,6 +17,16 @@
     </div>
 
     <div class="section">
+        <p class="grey-text text-darken-1" style="margin: 0;">
+            {{ summary.num_chars }} character{{ summary.num_chars|pluralize }}
+            · {{ summary.num_bytes }} bytes (UTF-8)
+            {% if summary.top3 %}
+            · Top chars: {% for item in summary.top3 %}<span title="{{ item.code_point }}">{{ item.display }}</span> ({{ item.count }}){% if not forloop.last %}, {% endif %}{% endfor %}
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="section">
         <h5 class="header col s12 green-text text-darken-2">
             Character Details
             <button id="copy-table-button" class="btn-flat green-text text-darken-2" type="button" title="Copy table to clipboard" style="vertical-align: middle; padding: 0 8px;">
