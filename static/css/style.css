@@ -42,10 +42,20 @@ main {
   max-width: 320px;
 }
 
-/* Decode page: wider container so input, stats, and table share one cohesive width */
+/* Decode page: wider container; uniform padding is applied by .decode-content below */
 .decode-page .container {
   width: 92%;
   max-width: 1200px;
+  box-sizing: border-box;
+}
+
+/* Decode content: single wrapper with uniform horizontal padding so form, stats, table, and normalization share one left edge and don’t hug the viewport */
+.decode-content {
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  text-align: left;
+  box-sizing: border-box;
 }
 
 .decode-page #index-banner form {
@@ -64,10 +74,60 @@ main {
   box-sizing: border-box;
 }
 
-/* Normalization table: centered on desktop, long-view stack on small screens */
+/* Button row: centered below the input */
+.decode-button-row {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Share button: outlined/ghost — transparent background to blend with page, green border and text only */
+.decode-page #share-button.btn-outlined {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 2px solid #2e7d32 !important; /* green darken-2 */
+  color: #2e7d32 !important;
+}
+.decode-page #share-button.btn-outlined:hover {
+  background: rgba(46, 125, 50, 0.08) !important;
+  box-shadow: none !important;
+}
+
+/* Normalization section: span full viewport width so the card can center on the page */
+.normalization-section {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  box-sizing: border-box;
+}
+
+/* Normalization: compact card, centered on full page width via margin auto */
+.normalization-card {
+  width: 400px;
+  max-width: calc(100% - 2rem);
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+.normalization-card .normalization-info-icon {
+  font-size: 0.9em;
+  color: #9e9e9e;
+  cursor: help;
+  margin-left: 0.25rem;
+  vertical-align: middle;
+}
+
+.normalization-card .normalization-table {
+  margin: 0.5rem 0 0 0;
+  max-width: none;
+  width: 100%;
+}
+
+/* Normalization table: long-view stack on small screens */
 .normalization-table {
-  max-width: 20em;
-  margin-left: auto;
+  margin-left: 0;
   margin-right: auto;
 }
 
