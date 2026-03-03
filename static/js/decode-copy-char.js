@@ -1,6 +1,6 @@
 /**
  * Decode page: per-row copy in the Character Details table.
- * Clicking the copy icon in the Action column copies that row's character to the clipboard.
+ * Clicking a table row copies that row's character to the clipboard (except when clicking a link).
  * Exposed as window.decodeCopyChar in the browser, or module.exports in Node (for tests).
  *
  * @param {HTMLTableElement|null} table - The codepoint-details table.
@@ -11,9 +11,10 @@ function attachCopyCharHandler(table, clipboard) {
   var clip = clipboard != null ? clipboard : (typeof navigator !== 'undefined' && navigator.clipboard);
   if (!clip) return;
   table.addEventListener('click', function(e) {
-    var btn = e.target && e.target.closest('.copy-char-btn');
-    if (!btn) return;
-    var ch = btn.getAttribute('data-char');
+    if (e.target && e.target.closest('a')) return;
+    var row = e.target && e.target.closest('tbody tr');
+    if (!row) return;
+    var ch = row.getAttribute('data-char');
     if (ch == null) return;
     clip.writeText(ch).then(function() {
       if (typeof M !== 'undefined' && M.toast) {
