@@ -22,6 +22,7 @@
         <p class="grey-text text-darken-1 left-align" style="margin: 0;">
             {{ summary.num_chars }} character{{ summary.num_chars|pluralize }}
             · {{ summary.num_bytes }} bytes (UTF-8)
+            · {{ summary.num_tokens }} token{{ summary.num_tokens|pluralize }}
             {% if summary.top3 %}
             · Top chars: {% for item in summary.top3 %}<span title="{{ item.code_point }}">{{ item.display }}</span> ({{ item.count }}){% if not forloop.last %}, {% endif %}{% endfor %}
             {% endif %}

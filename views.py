@@ -29,15 +29,17 @@ def _normalization_form_with_descriptions(normalization_form):
 
 
 def _text_summary(text):
-    """Build summary dict from decoded text (list of CharacterInfo): num_chars, num_bytes, top3."""
+    """Build summary dict from decoded text (list of CharacterInfo): num_chars, num_bytes, num_tokens, top3."""
     if not text:
         return {
             'num_chars': 0,
             'num_bytes': 0,
+            'num_tokens': 0,
             'top3': [],
         }
     num_chars = len(text)
     num_bytes = sum(len(info.char.encode('utf-8')) for info in text)
+    num_tokens = len(''.join(info.char for info in text).split())
     counts = Counter(info.char for info in text)
     top3 = []
     for c, n in counts.most_common(3):
@@ -52,6 +54,7 @@ def _text_summary(text):
     return {
         'num_chars': num_chars,
         'num_bytes': num_bytes,
+        'num_tokens': num_tokens,
         'top3': top3,
     }
 
