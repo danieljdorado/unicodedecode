@@ -12,7 +12,7 @@
   <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="{% static 'img/favicon.ico' %}" type="image/png" rel="shortcut icon" />
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <!-- Navigation Bar -->
   {% block navigation %}
     {% include 'decode/navigation.html' %}
