@@ -8,9 +8,14 @@
   {{ char }}
  
 </div>
-<div  style='text-align: left;'>
+<div id="go-back-container" style='text-align: left;'>
   <a href="javascript:history.back()" class='green-text text-darken-2'>Go Back</a>
 </div>
+{% load static %}
+<script src="{% static 'js/codepoint-go-back.js' %}"></script>
+<script>
+if (window.codepointGoBack) window.codepointGoBack.hideGoBackIfNoHistory();
+</script>
 <br>
 <h5 class="header center green-text text-darken-2">Codepoint Details</h5>
 <table class="highlight">

@@ -4,10 +4,78 @@ Handles rendering of the about, codepoint, decode, privacy, terms, and tofu
 pages, and processes Unicode text decoding form submissions.
 """
 
+from collections import Counter
 from dataclasses import asdict
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.http import HttpResponse
 from decode.forms import UnicodeTextForm
+from decode.mappings import INVISIBLE_CHARACTERS
 import decode.unicode_util as u
+
+# Short descriptions for normalization form column tooltips.
+NORMALIZATION_DESCRIPTIONS = {
+    u.NormalizationForm.NFC: 'Canonical Composition: precomposed characters where possible (e.g. é as single character).',
+    u.NormalizationForm.NFD: 'Canonical Decomposition: split into base character + combining marks (e.g. e + ´).',
+    u.NormalizationForm.NFKC: 'Compatibility Composition: precomposed + compatibility equivalents (e.g. ﬁ → fi).',
+    u.NormalizationForm.NFKD: 'Compatibility Decomposition: decomposed + compatibility equivalents.',
+}
+
+
+def _normalization_form_with_descriptions(normalization_form):
+    """Return a list of (form, value, description) for the normalization table and tooltips."""
+    return [
+        (form, normalization_form[form], NORMALIZATION_DESCRIPTIONS[form])
+        for form in u.NormalizationForm
+    ]
+
+
+def _text_summary(text):
+    """Build summary dict from decoded text (list of CharacterInfo): num_chars, num_bytes, num_tokens, top3."""
+    if not text:
+        return {
+            'num_chars': 0,
+            'num_bytes': 0,
+            'num_tokens': 0,
+            'top3': [],
+        }
+    num_chars = len(text)
+    num_bytes = sum(len(info.char.encode('utf-8')) for info in text)
+    num_tokens = len(''.join(info.char for info in text).split())
+    counts = Counter(info.char for info in text)
+    top3 = []
+    for c, n in counts.most_common(3):
+        code_point = u.get_code_point(c)
+        if c == ' ':
+            display = 'space'
+        elif ord(c) in INVISIBLE_CHARACTERS:
+            display = INVISIBLE_CHARACTERS[ord(c)]
+        else:
+            display = c
+        top3.append({'char': c, 'count': n, 'code_point': code_point, 'display': display})
+    return {
+        'num_chars': num_chars,
+        'num_bytes': num_bytes,
+        'num_tokens': num_tokens,
+        'top3': top3,
+    }
+
+
+def _decode_context(form, raw_text):
+    """Build common context used by decode result renders."""
+    normalization_form = u.get_normalization_form(raw_text)
+    normalization_form_list = _normalization_form_with_descriptions(normalization_form)
+    text = u.examen_unicode(raw_text)
+    summary = _text_summary(text)
+    return {
+        'form': form,
+        'text': text,
+        'summary': summary,
+        'normalization_form': normalization_form,
+        'normalization_form_list': normalization_form_list,
+        'title': 'Unicode Decode',
+        'tagline': 'See every character behind your text instantly',
+    }
 
 
 def about(request):
@@ -48,7 +116,8 @@ def privacy(request):
 def decode(request):
     """Handle the decode page: show form on GET, decode Unicode text on POST.
 
-    GET returns the home form. POST validates the form, normalizes and analyzes
+    GET returns the home form, or decode results if the `s` query parameter
+    is present (e.g. /?s=abcd). POST validates the form, normalizes and analyzes
     the submitted text, then renders the decode results.
 
     Returns:
@@ -58,14 +127,18 @@ def decode(request):
     if request.method == 'POST':
         form = UnicodeTextForm(request.POST)
         if form.is_valid():
-            text = form.cleaned_data['text']
-            normalization_form = u.get_normalization_form(text)
-            text = u.examen_unicode(text)
-            return render(request, 'decode/decode.html', {'form': form,
-                                                   'text': text,
-                                                   'normalization_form': normalization_form,
-                                                   'title' : 'Unicode Decode',
-                                                   'tagline' : 'See every character behind your text instantly'})
+            raw_text = form.cleaned_data['text']
+            context = _decode_context(form, raw_text)
+            if request.headers.get('X-Decode-Live') == '1':
+                html = render_to_string('decode/_decode_results.html', context, request=request)
+                return HttpResponse(html)
+            return render(request, 'decode/decode.html', context)
+
+    # GET with ?s=... : show decode results for that string
+    query_string = request.GET.get('s')
+    if query_string is not None and query_string != '':
+        form = UnicodeTextForm(initial={'text': query_string})
+        return render(request, 'decode/decode.html', _decode_context(form, query_string))
 
     form = UnicodeTextForm()
     return render(request, 'decode/home.html', {'form': form})

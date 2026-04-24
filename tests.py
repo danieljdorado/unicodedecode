@@ -98,6 +98,148 @@ class TestCodePoints(TestCase):
         self.assertIn('length 2', str(cm.exception))
 
 
+class TestGetUtf8Bytes(TestCase):
+    """Unit tests for get_utf8_bytes(char)."""
+
+    def test_ascii_single_byte(self):
+        """ASCII characters yield single 0xXX byte."""
+        self.assertEqual(u.get_utf8_bytes('k'), '0x6B')
+        self.assertEqual(u.get_utf8_bytes('A'), '0x41')
+        self.assertEqual(u.get_utf8_bytes(' '), '0x20')
+
+    def test_multibyte(self):
+        """Characters outside ASCII yield multiple bytes, space-separated."""
+        # U+00E9 LATIN SMALL LETTER E WITH ACUTE -> C3 A9
+        self.assertEqual(u.get_utf8_bytes('é'), '0xC3 0xA9')
+        # U+0800 (3 bytes)
+        self.assertEqual(u.get_utf8_bytes('\u0800'), '0xE0 0xA0 0x80')
+
+    def test_emoji_four_bytes(self):
+        """Emoji (U+10000 and above) yield four bytes."""
+        # U+1F600 GRINNING FACE -> F0 9F 98 80
+        self.assertEqual(u.get_utf8_bytes('😀'), '0xF0 0x9F 0x98 0x80')
+
+    def test_requires_single_character(self):
+        """get_utf8_bytes raises ValueError for empty or multi-character input."""
+        with self.assertRaises(ValueError) as cm:
+            u.get_utf8_bytes('')
+        self.assertIn('single character', str(cm.exception))
+        with self.assertRaises(ValueError) as cm:
+            u.get_utf8_bytes('ab')
+        self.assertIn('single character', str(cm.exception))
+
+
+class TestGetHtmlEntity(TestCase):
+    """Unit tests for get_html_entity(char)."""
+
+    def test_decimal_entity(self):
+        """Returns decimal HTML numeric character reference."""
+        self.assertEqual(u.get_html_entity('k'), '&#107;')
+        self.assertEqual(u.get_html_entity('A'), '&#65;')
+        self.assertEqual(u.get_html_entity(' '), '&#32;')
+
+    def test_emoji_entity(self):
+        """Supplementary characters get full code point in decimal."""
+        # U+1F600 = 128512
+        self.assertEqual(u.get_html_entity('😀'), '&#128512;')
+
+    def test_requires_single_character(self):
+        """get_html_entity raises ValueError for empty or multi-character input."""
+        with self.assertRaises(ValueError) as cm:
+            u.get_html_entity('')
+        self.assertIn('single character', str(cm.exception))
+        with self.assertRaises(ValueError) as cm:
+            u.get_html_entity('ab')
+        self.assertIn('single character', str(cm.exception))
+
+
+class TestGetScript(TestCase):
+    """Unit tests for get_script(char). Script column for homoglyph detection."""
+
+    def test_latin(self):
+        """Latin script characters return 'Latin'."""
+        self.assertEqual(u.get_script('A'), 'Latin')
+        self.assertEqual(u.get_script('k'), 'Latin')
+
+    def test_cyrillic(self):
+        """Cyrillic script characters return 'Cyrillic'."""
+        # Cyrillic small letter a (looks like Latin 'a')
+        self.assertEqual(u.get_script('\u0430'), 'Cyrillic')
+
+    def test_arabic(self):
+        """Arabic script characters return 'Arabic'."""
+        # Arabic letter alef
+        self.assertEqual(u.get_script('\u0627'), 'Arabic')
+
+    def test_common(self):
+        """Punctuation, digits, and symbols with no script return 'Common'."""
+        self.assertEqual(u.get_script(' '), 'Common')
+        self.assertEqual(u.get_script('0'), 'Common')
+
+    def test_inherited(self):
+        """Combining marks return 'Inherited'."""
+        # COMBINING ACUTE ACCENT
+        self.assertEqual(u.get_script('\u0301'), 'Inherited')
+
+    def test_returns_none_for_invalid_input(self):
+        """Empty or multi-character input returns None."""
+        self.assertIsNone(u.get_script(''))
+        self.assertIsNone(u.get_script('ab'))
+
+
+class TestGetHomoglyphRisk(TestCase):
+    """Unit tests for get_homoglyph_risk(char). Flags spoofing/homoglyph attack characters."""
+
+    def test_latin_ascii_no_risk(self):
+        """Latin ASCII letters are not flagged (they are the target of spoofing, not spoofers)."""
+        self.assertIsNone(u.get_homoglyph_risk('a'))
+        self.assertIsNone(u.get_homoglyph_risk('A'))
+        self.assertIsNone(u.get_homoglyph_risk('k'))
+
+    def test_cyrillic_lookalike_flagged(self):
+        """Cyrillic letters that look like Latin are flagged."""
+        self.assertEqual(u.get_homoglyph_risk('\u0430'), 'Yes')   # Cyrillic 'a'
+        self.assertEqual(u.get_homoglyph_risk('\u043E'), 'Yes')   # Cyrillic 'o'
+        self.assertEqual(u.get_homoglyph_risk('\u0440'), 'Yes')   # Cyrillic 'r' (looks like p)
+
+    def test_greek_lookalike_flagged(self):
+        """Greek letters that look like Latin are flagged."""
+        self.assertEqual(u.get_homoglyph_risk('\u03B1'), 'Yes')   # Greek alpha
+        self.assertEqual(u.get_homoglyph_risk('\u03BF'), 'Yes')   # Greek omicron
+
+    def test_fullwidth_flagged(self):
+        """Fullwidth ASCII variants are flagged."""
+        self.assertEqual(u.get_homoglyph_risk('\uFF41'), 'Yes')   # Fullwidth 'a'
+
+    def test_returns_none_for_invalid_input(self):
+        self.assertIsNone(u.get_homoglyph_risk(''))
+        self.assertIsNone(u.get_homoglyph_risk('ab'))
+
+
+class TestGetInvisibleWarning(TestCase):
+    """Unit tests for get_invisible_warning(char). Flags zero-width and invisible characters."""
+
+    def test_visible_characters_return_none(self):
+        self.assertIsNone(u.get_invisible_warning('A'))
+        self.assertIsNone(u.get_invisible_warning(' '))
+
+    def test_zero_width_space_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\u200B'), 'Zero-width space')
+
+    def test_zero_width_joiner_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\u200D'), 'Zero-width joiner')
+
+    def test_bom_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\uFEFF'), 'Zero-width no-break space (BOM)')
+
+    def test_word_joiner_flagged(self):
+        self.assertEqual(u.get_invisible_warning('\u2060'), 'Word joiner')
+
+    def test_returns_none_for_invalid_input(self):
+        self.assertIsNone(u.get_invisible_warning(''))
+        self.assertIsNone(u.get_invisible_warning('ab'))
+
+
 class TestIsNormalized(TestCase):
     """Unit tests for is_normalized(form, s)."""
 
@@ -374,6 +516,11 @@ class TestExamenUnicode(TestCase):
         self.assertEqual(result[0].ordinal, 65)
         self.assertEqual(result[0].code_point, 'U+0041')
         self.assertEqual(result[0].hex_code, '0041')
+        self.assertEqual(result[0].utf8_bytes, '0x41')
+        self.assertEqual(result[0].html_entity, '&#65;')
+        self.assertEqual(result[0].script, 'Latin')
+        self.assertIsNone(result[0].homoglyph_risk)
+        self.assertIsNone(result[0].invisible)
 
     def test_multiple_characters(self):
         """Multiple characters return one CharacterInfo per character."""
@@ -388,6 +535,27 @@ class TestExamenUnicode(TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].char, '😀')
         self.assertEqual(result[0].code_point, 'U+1F600')
+        self.assertEqual(result[0].utf8_bytes, '0xF0 0x9F 0x98 0x80')
+        self.assertEqual(result[0].html_entity, '&#128512;')
+        # Emoji / symbols typically have script Common
+        self.assertIn(result[0].script, ('Common', 'Latin'))
+
+    def test_script_column_mixed_text(self):
+        """Mixed-script text shows different scripts (homoglyph detection)."""
+        result = u.examen_unicode('a\u0430')  # Latin a + Cyrillic a
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0].script, 'Latin')
+        self.assertEqual(result[1].script, 'Cyrillic')
+
+    def test_homoglyph_risk_flagged_in_table(self):
+        """Cyrillic lookalike has homoglyph_risk set for Spoofing column."""
+        result = u.examen_unicode('\u0430')  # Cyrillic 'a'
+        self.assertEqual(result[0].homoglyph_risk, 'Yes')
+
+    def test_invisible_flagged_in_table(self):
+        """Zero-width character has invisible set for Invisible column."""
+        result = u.examen_unicode('\u200B')  # Zero-width space
+        self.assertEqual(result[0].invisible, 'Zero-width space')
 
 
 class TestAlias(TestCase):

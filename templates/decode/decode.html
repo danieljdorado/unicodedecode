@@ -1,75 +1,44 @@
 {% extends 'decode/base.html' %}
 
-{% block content %}
+{% block body_class %}decode-page{% endblock %}
 
-    <div class="row center">
-        <form action="{% url 'decode' %}" method="post">
+{% block content %}
+    <div class="decode-content">
+    <div class="row">
+        <form action="{% url 'decode' %}" method="post" id="decode-form">
         {% csrf_token %}
+        <p class="grey-text text-darken-1 left-align" style="margin-top: 0; margin-bottom: 0.5rem;">Paste any text, emoji, or special characters.</p>
         {{ form }}
-        <p>
-            <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Examine</button>
+        <p class="decode-button-row center">
+            <button id="decode-button" class="btn-large waves-effect waves-light green darken-2" type="submit">Examine</button>
+            <button id="share-button" class="btn-large btn-outlined green darken-2" type="button" title="Copy link to clipboard">
+                <i class="material-icons left">share</i>Share
+            </button>
         </p>
         </form>
     </div>
 
-    <div class="section">
-        <h5 class="header col s12 green-text text-darken-2">Character Details</h5>
-        <table class="responsive-table highlight codepoint-details-table">
-            <thead>
-              <tr>
-                <th>Character</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Digit</th>
-                <th>Direction</th>
-                <th>Integer</th>
-                <th>Code Point</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for x in text %}
-                <tr>
-                    <td data-label="Character">{{ x.char|default:"N/A" }}</td>
-                    <td data-label="Name"><a href="{% url 'codepoint' slug=x.hex_code %}" class="green-text text-darken-2">{{ x.name|default:"N/A" }}</a></td>
-                    <td data-label="Category">{{ x.category|default:"N/A" }}</td>
-                    <td data-label="Digit">{{ x.digit|default:"N/A" }}</td>
-                    <td data-label="Direction">{{ x.bidi|default:"N/A" }}</td>
-                    <td data-label="Integer">{{ x.ordinal|default:"N/A" }}</td>
-                    <td data-label="Code Point">{{ x.code_point|default:"N/A" }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <div id="decode-results-container">
+    {% include 'decode/_decode_results.html' %}
+    </div><!-- #decode-results-container -->
 
-    <div class="section">
-        <h5 class="header col s12 center green-text text-darken-2">Normalization Form</h5>
-        <div class="row">
-            <div class="col s12 center">
-                <table class="responsive-table highlight normalization-table">
-            <thead>
-              <tr>
-                {% for key in normalization_form.keys %}
-                <th>{{ key.name }}</th>
-                {% endfor %}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {% for key, item in normalization_form.items %}
-                <td data-label="{{ key.name }}">
-                    {% if item == True %}
-                        <span class="green-text text-darken-2">{{ item }}</span>
-                    {% else %}
-                        <span class="red-text text-darken-2">{{ item }}</span>
-                    {% endif %}
-                </td>
-                {% endfor %}
-              </tr>
-            </tbody>
-        </table>
-            </div>
-        </div>
-    </div>
+    </div><!-- .decode-content -->
+
+    {% load static %}
+    <script src="{% static 'js/decode-clipboard.js' %}"></script>
+    <script src="{% static 'js/decode-copy-char.js' %}"></script>
+    <script src="{% static 'js/decode-live.js' %}"></script>
+    <script>
+// Per-row copy: clicking the copy icon in the Action column copies that row's character.
+(function() {
+  var table = document.getElementById('codepoint-details-table');
+  if (window.decodeCopyChar) window.decodeCopyChar.attachCopyCharHandler(table);
+})();
+
+// Copy table button (shared with decode-live.js after inject)
+if (window.decodeClipboard && window.decodeClipboard.attachCopyTableButton) {
+  window.decodeClipboard.attachCopyTableButton();
+}
+    </script>
 
 {% endblock %}
