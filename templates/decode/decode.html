@@ -5,11 +5,12 @@
 {% block content %}
     <div class="decode-content">
     <div class="row">
-        <form action="{% url 'decode' %}" method="get" id="decode-form">
+        <form action="{% url 'decode' %}" method="post" id="decode-form">
         {% csrf_token %}
         <p class="grey-text text-darken-1 left-align" style="margin-top: 0; margin-bottom: 0.5rem;">Paste any text, emoji, or special characters.</p>
         {{ form }}
         <p class="decode-button-row center">
+            <button id="decode-button" class="btn-large waves-effect waves-light green darken-2" type="submit">Examine</button>
             <button id="share-button" class="btn-large btn-outlined green darken-2" type="button" title="Copy link to clipboard">
                 <i class="material-icons left">share</i>Share
             </button>
@@ -18,86 +19,7 @@
     </div>
 
     <div id="decode-results-container">
-    <div class="section">
-        <p class="grey-text text-darken-1 left-align" style="margin: 0;">
-            {{ summary.num_chars }} character{{ summary.num_chars|pluralize }}
-            · {{ summary.num_bytes }} bytes (UTF-8)
-            · {{ summary.num_tokens }} token{{ summary.num_tokens|pluralize }}
-            {% if summary.top3 %}
-            · Top chars: {% for item in summary.top3 %}<span title="{{ item.code_point }}">{{ item.display }}</span> ({{ item.count }}){% if not forloop.last %}, {% endif %}{% endfor %}
-            {% endif %}
-        </p>
-    </div>
-
-    <div class="section">
-        <h5 class="header col s12 green-text text-darken-2 left-align">
-            Character Details
-            <button id="copy-table-button" class="btn-flat green-text text-darken-2" type="button" title="Copy table to clipboard" style="vertical-align: middle; padding: 0 8px;">
-                <i class="material-icons">content_copy</i>
-            </button>
-        </h5>
-        <table id="codepoint-details-table" class="responsive-table highlight codepoint-details-table">
-            <thead>
-              <tr>
-                <th>Character</th>
-                <th>Name</th>
-                <th>Script</th>
-                <th>Invisible</th>
-                <th>Category</th>
-                <th>Integer</th>
-                <th>Code Point</th>
-                <th>UTF-8</th>
-                <th>HTML</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for x in text %}
-                <tr data-char="{{ x.char }}" title="Click to copy character">
-                    <td data-label="Character">{{ x.char|default:"N/A" }}</td>
-                    <td data-label="Name"><a href="{% url 'codepoint' slug=x.hex_code %}" class="green-text text-darken-2">{{ x.name|default:"N/A" }}</a></td>
-                    <td data-label="Script">{{ x.script|default:"N/A" }}</td>
-                    <td data-label="Invisible">{% if x.invisible %}<span class="red-text text-darken-2" title="{{ x.invisible }}">⚠</span>{% else %}—{% endif %}</td>
-                    <td data-label="Category">{{ x.category|default:"N/A" }}</td>
-                    <td data-label="Integer">{{ x.ordinal|default:"N/A" }}</td>
-                    <td data-label="Code Point">{{ x.code_point|default:"N/A" }}</td>
-                    <td data-label="UTF-8">{{ x.utf8_bytes|default:"N/A" }}</td>
-                    <td data-label="HTML">{{ x.html_entity|default:"N/A" }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section normalization-section">
-        <div class="normalization-card">
-            <h5 class="header green-text text-darken-2" style="margin-top: 0;">
-                Normalization Form
-                <span class="normalization-info-icon" title="True = your text is already in this form (no change if normalized). False = normalizing to this form would change the text. Hover over a column header for a short description of each form." aria-label="Normalization help">ⓘ</span>
-            </h5>
-            <table class="responsive-table highlight normalization-table">
-                <thead>
-                    <tr>
-                        {% for form, value, desc in normalization_form_list %}
-                        <th title="{{ desc }}">{{ form.name }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {% for form, value, desc in normalization_form_list %}
-                        <td data-label="{{ form.name }}" title="{{ desc }}">
-                            {% if value == True %}
-                                <span class="green-text text-darken-2">{{ value }}</span>
-                            {% else %}
-                                <span class="red-text text-darken-2">{{ value }}</span>
-                            {% endif %}
-                        </td>
-                        {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    {% include 'decode/_decode_results.html' %}
     </div><!-- #decode-results-container -->
 
     </div><!-- .decode-content -->
