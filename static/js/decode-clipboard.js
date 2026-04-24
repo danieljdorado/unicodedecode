@@ -53,9 +53,35 @@ function tableToHtml(el) {
   return html;
 }
 
+/** Attach click handler to #copy-table-button to copy the Character Details table as TSV+HTML. Call after injecting new results. */
+function attachCopyTableButton() {
+  var copyTableBtn = document.getElementById('copy-table-button');
+  var table = document.getElementById('codepoint-details-table');
+  if (!copyTableBtn || !table || !window.decodeClipboard) return;
+  var decodeClipboard = window.decodeClipboard;
+  copyTableBtn.addEventListener('click', function() {
+    var tsv = decodeClipboard.tableToTsv(table);
+    var html = decodeClipboard.tableToHtml(table);
+    if (!tsv) return;
+    var item = new ClipboardItem({
+      'text/plain': new Blob([tsv], { type: 'text/plain' }),
+      'text/html': new Blob([html], { type: 'text/html' })
+    });
+    navigator.clipboard.write([item]).then(function() {
+      if (typeof M !== 'undefined' && M.toast) {
+        M.toast({ html: 'Table copied to clipboard', displayLength: 2000 });
+      }
+    }).catch(function() {
+      if (typeof M !== 'undefined' && M.toast) {
+        M.toast({ html: 'Could not copy table', displayLength: 2000 });
+      }
+    });
+  });
+}
+
 if (typeof window !== 'undefined') {
-  window.decodeClipboard = { escapeHtml: escapeHtml, cellText: cellText, tableToTsv: tableToTsv, tableToHtml: tableToHtml };
+  window.decodeClipboard = { escapeHtml: escapeHtml, cellText: cellText, tableToTsv: tableToTsv, tableToHtml: tableToHtml, attachCopyTableButton: attachCopyTableButton };
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { escapeHtml: escapeHtml, cellText: cellText, tableToTsv: tableToTsv, tableToHtml: tableToHtml };
+  module.exports = { escapeHtml: escapeHtml, cellText: cellText, tableToTsv: tableToTsv, tableToHtml: tableToHtml, attachCopyTableButton: attachCopyTableButton };
 }

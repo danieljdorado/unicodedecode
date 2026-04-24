@@ -30,10 +30,13 @@
           {% csrf_token %}
           <p class="grey-text text-darken-1 left-align" style="margin-top: 0; margin-bottom: 0.5rem;">Paste any text, emoji, or special characters.</p>
           {{ form }}
-          <p>
-              <button id="decode-button" class="btn-large waves-effect waves- green darken-2">Examine</button>
+          <p class="decode-button-row center">
+              <button id="share-button" class="btn-large btn-outlined green darken-2" type="button" title="Copy link to clipboard">
+                  <i class="material-icons left">share</i>Share
+              </button>
           </p>
       </form>
+      <div id="decode-results-container"></div>
       <div class="row center">
 
       </div>
@@ -43,7 +46,7 @@
     </div>
   </div>
 
-  <div class="container">
+  <div class="container" id="home-features">
     <div class="section">
 
       <!--   Icon Section   -->
@@ -90,6 +93,9 @@
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="{% static 'js/materialize.js' %}"></script>
   <script src="{% static '/js/init.js' %}"></script>
+  <script src="{% static 'js/decode-clipboard.js' %}"></script>
+  <script src="{% static 'js/decode-copy-char.js' %}"></script>
+  <script src="{% static 'js/decode-live.js' %}"></script>
 
   </body>
 </html>

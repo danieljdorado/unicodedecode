@@ -80,13 +80,15 @@ main {
   text-align: center;
 }
 
-/* Share button: outlined/ghost — transparent background to blend with page, green border and text only */
+/* Share button: outlined/ghost — transparent background, green border and text (decode page and home) */
+#share-button.btn-outlined,
 .decode-page #share-button.btn-outlined {
   background: transparent !important;
   box-shadow: none !important;
   border: 2px solid #2e7d32 !important; /* green darken-2 */
   color: #2e7d32 !important;
 }
+#share-button.btn-outlined:hover,
 .decode-page #share-button.btn-outlined:hover {
   background: rgba(46, 125, 50, 0.08) !important;
   box-shadow: none !important;

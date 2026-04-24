@@ -5,12 +5,11 @@
 {% block content %}
     <div class="decode-content">
     <div class="row">
-        <form action="{% url 'decode' %}" method="post">
+        <form action="{% url 'decode' %}" method="get" id="decode-form">
         {% csrf_token %}
         <p class="grey-text text-darken-1 left-align" style="margin-top: 0; margin-bottom: 0.5rem;">Paste any text, emoji, or special characters.</p>
         {{ form }}
         <p class="decode-button-row center">
-            <button id="decode-button" class="btn-large waves-effect waves-light green darken-2" type="submit">Examine</button>
             <button id="share-button" class="btn-large btn-outlined green darken-2" type="button" title="Copy link to clipboard">
                 <i class="material-icons left">share</i>Share
             </button>
@@ -18,6 +17,7 @@
         </form>
     </div>
 
+    <div id="decode-results-container">
     <div class="section">
         <p class="grey-text text-darken-1 left-align" style="margin: 0;">
             {{ summary.num_chars }} character{{ summary.num_chars|pluralize }}
@@ -98,12 +98,14 @@
             </table>
         </div>
     </div>
+    </div><!-- #decode-results-container -->
 
     </div><!-- .decode-content -->
 
     {% load static %}
     <script src="{% static 'js/decode-clipboard.js' %}"></script>
     <script src="{% static 'js/decode-copy-char.js' %}"></script>
+    <script src="{% static 'js/decode-live.js' %}"></script>
     <script>
 // Per-row copy: clicking the copy icon in the Action column copies that row's character.
 (function() {
@@ -111,58 +113,10 @@
   if (window.decodeCopyChar) window.decodeCopyChar.attachCopyCharHandler(table);
 })();
 
-// Share button: copies the decode page URL (with ?s=... for the current text) to the clipboard.
-(function() {
-  var shareBtn = document.getElementById('share-button');
-  var textarea = document.getElementById('textarea1');
-  if (!shareBtn || !textarea) return;
-  shareBtn.addEventListener('click', function() {
-    var text = textarea.value.trim();
-    var url = text
-      ? window.location.origin + window.location.pathname + '?s=' + encodeURIComponent(text)
-      : window.location.origin + window.location.pathname;
-    navigator.clipboard.writeText(url).then(function() {
-      if (typeof M !== 'undefined' && M.toast) {
-        M.toast({ html: 'Link copied to clipboard', displayLength: 2000 });
-      } else {
-        shareBtn.textContent = 'Copied!';
-        setTimeout(function() { shareBtn.innerHTML = '<i class="material-icons left">share</i>Share'; }, 1500);
-      }
-    }).catch(function() {
-      if (typeof M !== 'undefined' && M.toast) {
-        M.toast({ html: 'Could not copy link', displayLength: 2000 });
-      }
-    });
-  });
-})();
-
-// Copy table button: copies the Character Details table to the clipboard as both
-// plain text (TSV) and HTML so that pasting into Excel/Sheets keeps links in the Name column.
-(function() {
-  var copyTableBtn = document.getElementById('copy-table-button');
-  var table = document.getElementById('codepoint-details-table');
-  if (!copyTableBtn || !table || !window.decodeClipboard) return;
-  var decodeClipboard = window.decodeClipboard;
-
-  copyTableBtn.addEventListener('click', function() {
-    var tsv = decodeClipboard.tableToTsv(table);
-    var html = decodeClipboard.tableToHtml(table);
-    if (!tsv) return;
-    var item = new ClipboardItem({
-      'text/plain': new Blob([tsv], { type: 'text/plain' }),
-      'text/html': new Blob([html], { type: 'text/html' })
-    });
-    navigator.clipboard.write([item]).then(function() {
-      if (typeof M !== 'undefined' && M.toast) {
-        M.toast({ html: 'Table copied to clipboard', displayLength: 2000 });
-      }
-    }).catch(function() {
-      if (typeof M !== 'undefined' && M.toast) {
-        M.toast({ html: 'Could not copy table', displayLength: 2000 });
-      }
-    });
-  });
-})();
+// Copy table button (shared with decode-live.js after inject)
+if (window.decodeClipboard && window.decodeClipboard.attachCopyTableButton) {
+  window.decodeClipboard.attachCopyTableButton();
+}
     </script>
 
 {% endblock %}
